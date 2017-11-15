@@ -75,8 +75,9 @@ public class PlayerMovement : MonoBehaviour {
 	BoxCollider2D box;
 	Vector2[] debugPts;
 
+	public GameObject takenObj;
 
-	float scaleSpd;
+
 
 
 
@@ -96,6 +97,9 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		if (Input.GetKeyDown(KeyCode.R)) {
+			Application.LoadLevel(Application.loadedLevel);
+		}
 
 		trigger = Input.GetAxis (rightTrigger) == 1;
 		right = Input.GetAxis (leftStickH) > 0 || Input.GetKeyDown(KeyCode.RightArrow);
@@ -175,9 +179,11 @@ public class PlayerMovement : MonoBehaviour {
 			mx = airMaxSpd;
 		}
 
-		//		if (vel.y > 0 && !Input.GetButton(aButton)) {
-		//			vel.y -= unjumpBonusGrav * Time.fixedDeltaTime;
-		//		}
+//		if (vel.y < 0 && !yoyoing) {
+//			Debug.Log ("test");
+//			vel.y -= unjumpBonusGrav * Time.fixedDeltaTime;
+//		}
+//		Debug.Log (vel.y);
 
 		if (right && !trigger) {
 			vel.x += accel * Time.fixedDeltaTime;
@@ -235,14 +241,20 @@ public class PlayerMovement : MonoBehaviour {
 
 		melee.GetComponent<MeleeController> ().meleeTimer = melee.GetComponent<MeleeController> ().meleeLength;
 
-		if (dir == Vector2.zero) {
-			melee.transform.position = (Vector2)this.transform.position + new Vector2 (.5f, 0);
-		} else{
-			melee.transform.position = (Vector2)this.transform.position + dir * .5f;
-		}
-
-		melee.transform.eulerAngles = new Vector3 (melee.transform.eulerAngles.x, melee.transform.eulerAngles.y, Geo.ToAng (dir)); 
+//		if (dir == Vector2.zero) {
+//			melee.transform.position = (Vector2)this.transform.position + new Vector2 (.5f, 0);
+//		} else{
+//			melee.transform.position = (Vector2)this.transform.position + dir * .5f;
+//		}
+//
+//		melee.transform.eulerAngles = new Vector3 (melee.transform.eulerAngles.x, melee.transform.eulerAngles.y, Geo.ToAng (dir)); 
 		melee.SetActive (true);
+
+		if (takenObj != null) {
+
+			Destroy (takenObj);
+
+		}
 
 	}
 
@@ -282,7 +294,7 @@ public class PlayerMovement : MonoBehaviour {
 			vel.y = 0;
 			safety = true;
 			if (!prevGrounded) {
-				scaleSpd = -.1f;
+				//scaleSpd = -.1f;
 			}
 		}
 	}

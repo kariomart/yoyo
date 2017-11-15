@@ -8,6 +8,8 @@ public class YoyoController : MonoBehaviour {
 	GameObject player;
 	PlayerMovement playerController;
 
+	public GameObject hitParticle;
+
 	public Vector2 vel;
 	public Vector2 dir;
 
@@ -79,18 +81,17 @@ public class YoyoController : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Enemy") {
 
-			Destroy (coll.gameObject);
+			//Destroy (coll.gameObject);
+			coll.GetComponent<EnemyController>().pulled = true;
+
 
 		}
 
 		if (coll.gameObject.tag == "Stage") {
 
-			Debug.Log ("Hit Stage");
 			jumpDir = (player.transform.position - this.transform.position).normalized;
-			Debug.Log ("jumpForce " + jumpDir * playerController.jumpSpd);
+			Instantiate (hitParticle, transform.position, Quaternion.identity);
 			playerController.vel = jumpDir * playerController.jumpSpd;
-
-			//playerController.yoyoJump ();
 
 		}
 
