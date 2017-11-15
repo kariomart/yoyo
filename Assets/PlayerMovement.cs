@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		//right = Input.GetKeyDown(KeyCode.RightArrow);
 		//left = Input.GetKeyDown(KeyCode.LeftArrow);
-	
+
 
 
 
@@ -112,17 +112,22 @@ public class PlayerMovement : MonoBehaviour {
 		dir.Normalize ();
 
 		dir1 = new Vector2 (Input.GetAxis (rightStickH), Input.GetAxis (rightStickV));
-		if (dir1.magnitude > 1) dir1.Normalize ();
-
+		if (dir1.magnitude > 1) {
+			dir1.Normalize ();
+		}
+		if (dir1.magnitude < .25f) {
+			dir1 = Vector2.zero;
+		}
+		//Debug.Log (dir1);
 
 		if (Input.GetButtonDown(aButton) || Input.GetKeyDown(KeyCode.Space)) {
-			jumpFlag = true;
+			//	jumpFlag = true;
 		}
 
 
 		if (Input.GetButtonDown (xButton) || Input.GetKeyDown(shootKey)) {
 
-				ShootBullet ();
+			ShootBullet ();
 
 		}
 
@@ -139,8 +144,8 @@ public class PlayerMovement : MonoBehaviour {
 			//Yoyo();
 
 		}
-			
-			
+
+
 
 
 		if (health <= 0 && !gameOver) {
@@ -151,41 +156,13 @@ public class PlayerMovement : MonoBehaviour {
 
 	private void FixedUpdate() {
 
+
+		//Debug.Log ("vel1 " + vel + "yoyoing " + yoyoing + "grounded " + grounded);
+
 		if (dir1 != Vector2.zero && !yoyoing) {
 
 			Yoyo ();
 
-		}
-
-		//Debug.Log (grounded);
-
-
-//		if (!spinning) {
-//			pivot.transform.localScale = new Vector2 (defaultScale.x + (defaultScale.y - pivot.transform.localScale.y), pivot.transform.localScale.y + scaleSpd);
-//		}
-
-
-		SetGrounded();
-
-		if (!grounded /*&& spinning*/) {
-			//sprite.eulerAngles = new Vector3(0, 0, sprite.eulerAngles.z + ((spinSpd) * Time.fixedDeltaTime * spinDir));
-			//sprite.localScale = new Vector3(defSprScale.x, defSprScale.y * .75f, 1f);
-		} else {
-			sprite.eulerAngles = Vector3.zero;
-			//sprite.localScale = defSprScale;
-		}
-
-
-		if (jumpFlag && grounded) {
-			if ((left || right)) {
-				//spinning = true;
-
-				//if (left) spinDir = 1;
-				//if (right) spinDir = -1;
-			}
-			vel.y = jumpSpd;
-		} else if (jumpFlag && !grounded) {
-			safety = false;
 		}
 
 
@@ -198,9 +175,9 @@ public class PlayerMovement : MonoBehaviour {
 			mx = airMaxSpd;
 		}
 
-		if (vel.y > 0 && !Input.GetButton(aButton)) {
-			vel.y -= unjumpBonusGrav * Time.fixedDeltaTime;
-		}
+		//		if (vel.y > 0 && !Input.GetButton(aButton)) {
+		//			vel.y -= unjumpBonusGrav * Time.fixedDeltaTime;
+		//		}
 
 		if (right && !trigger) {
 			vel.x += accel * Time.fixedDeltaTime;
@@ -212,22 +189,19 @@ public class PlayerMovement : MonoBehaviour {
 			face = -1;
 		}
 
-
 		vel.x = Mathf.Max(Mathf.Min(vel.x, mx), -mx);
 
-		if (!right && !left) {
+
+
+		if (!right && !left && !yoyoing) {
 			vel.x = 0;
 		}
 
 		jumpFlag = false;
 		shotTimer--;
 
-		if (gameOver) {
-			vel = Vector2.zero;
-		}
-
-
 		rb.MovePosition ((Vector2)transform.position + vel * Time.fixedDeltaTime);
+		SetGrounded();
 		//bulletDir = Vector2.zero;
 
 
@@ -237,6 +211,8 @@ public class PlayerMovement : MonoBehaviour {
 
 	}
 
+
+
 	void OnCollisionEnter2D(Collision2D coll) {
 
 
@@ -244,22 +220,19 @@ public class PlayerMovement : MonoBehaviour {
 
 	public void Yoyo() {
 
+		//		Debug.Log ("yoyod");
 		yoyoing = true;
 		yoyoController.SetVelo (dir1);
-//		Debug.Log (dir1.magnitude);
 		yoyoController.maxDistance = 5f * dir1.magnitude;
 		yoyoController.maxSpeed = .5f * dir1.magnitude;
 		yoyo.SetActive (true);
-		//GameObject temp = Instantiate (yoyo, transform.position, Quaternion.identity);
-		//temp.GetComponent<YoyoController> ().SetVelo (dir1);
-
 
 	}
 
 
 	public void Melee() {
 
-	
+
 		melee.GetComponent<MeleeController> ().meleeTimer = melee.GetComponent<MeleeController> ().meleeLength;
 
 		if (dir == Vector2.zero) {
@@ -267,7 +240,7 @@ public class PlayerMovement : MonoBehaviour {
 		} else{
 			melee.transform.position = (Vector2)this.transform.position + dir * .5f;
 		}
-	
+
 		melee.transform.eulerAngles = new Vector3 (melee.transform.eulerAngles.x, melee.transform.eulerAngles.y, Geo.ToAng (dir)); 
 		melee.SetActive (true);
 
@@ -279,7 +252,7 @@ public class PlayerMovement : MonoBehaviour {
 		GameObject tempBullet = Instantiate(bullet, new Vector3(shootPt.position.x + dir.x, shootPt.transform.position.y + dir.y), Quaternion.identity);
 		BulletController bulletController = tempBullet.GetComponent<BulletController> ();
 		if (dir == Vector2.zero) {
-			
+
 			bulletController.vel = new Vector2 (1, 0);
 
 		} else {
@@ -294,7 +267,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
 	void SetGrounded() {
-		
+
 		Vector2 pt1 = transform.TransformPoint(box.offset + new Vector2(box.size.x / 2, -box.size.y / 2) + new Vector2(-.01f, 0));//(box.size / 2));
 		Vector2 pt2 = transform.TransformPoint(box.offset - (box.size / 2) + new Vector2(.01f, 0));
 
@@ -306,7 +279,6 @@ public class PlayerMovement : MonoBehaviour {
 		//		Debug.Log (grounded);
 
 		if (grounded) {
-			//spinning = false;
 			vel.y = 0;
 			safety = true;
 			if (!prevGrounded) {
