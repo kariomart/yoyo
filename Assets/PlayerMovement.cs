@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -80,6 +81,9 @@ public class PlayerMovement : MonoBehaviour {
 	public bool goingToGrapple;
 	public float grappleSpd;
 
+	public Text timer;
+	float startTime;
+
 
 
 
@@ -92,14 +96,15 @@ public class PlayerMovement : MonoBehaviour {
 		//sprite = GetComponent<SpriteRenderer> ();
 		defSprScale = sprite.localScale;
 		debugPts = new Vector2[2];
-		defaultScale = pivot.transform.localScale;//new Vector2 (sprite.BroadcastMessagetransform.localScale.x, transform.localScale.y); 
+		defaultScale = pivot.transform.localScale;
+		startTime = Time.time;
 
 	}
 
 	// Update is called once per frame
 	void Update () {
 
-		if (Input.GetKeyDown(KeyCode.R)) {
+		if (Input.GetKeyDown(KeyCode.R) || Input.GetButtonDown("start") || transform.position.y < -10f) {
 			Application.LoadLevel(Application.loadedLevel);
 		}
 
@@ -133,7 +138,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (Input.GetButtonDown (xButton) || Input.GetKeyDown(shootKey)) {
 
-			ShootBullet ();
+			//ShootBullet ();
 
 		}
 
@@ -163,6 +168,8 @@ public class PlayerMovement : MonoBehaviour {
 
 	private void FixedUpdate() {
 
+		updateTimer ();
+
 		//Debug.Log ("vel1 " + vel + "yoyoing " + yoyoing + "grounded " + grounded);
 
 		if (dir1 != Vector2.zero && !yoyoing && !grappling) {
@@ -171,11 +178,19 @@ public class PlayerMovement : MonoBehaviour {
 
 		}
 
-		if (grappling && Input.GetButton (aButton)) {
-			goingToGrapple = true;
-			vel = (dir + (Vector2)(yoyo.transform.position - transform.position).normalized) * grappleSpd;
 
-		} else if (goingToGrapple || (grappling && Input.GetButtonDown("start"))) {
+
+		if (grappling && Input.GetButton (aButton)) {
+			float dis = Vector2.Distance (yoyo.transform.position, transform.position);
+
+
+			goingToGrapple = true;
+
+			if (dis < 8f) {
+				vel = (dir + (Vector2)(yoyo.transform.position - transform.position).normalized) * grappleSpd;
+			}
+
+		} else if (goingToGrapple || (grappling && Input.GetButtonDown(xButton))) {
 			goingToGrapple = false;
 			grappling = false;
 			yoyoing = true;
@@ -230,9 +245,21 @@ public class PlayerMovement : MonoBehaviour {
 
 	}
 
+	void updateTimer() {
+		float t = (float)System.Math.Round (Time.time - startTime, 2);
+		timer.text = "TIME: " + t;
+
+	}
+
 
 
 	void OnCollisionEnter2D(Collision2D coll) {
+
+		if (coll.gameObject.name == "end") {
+
+			Time.timeScale = 0;
+
+		}
 
 
 	}
@@ -265,7 +292,14 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (takenObj != null) {
 
-			Destroy (takenObj);
+			//Destroy (takenObj);
+			takenObj.GetComponent<EnemyController>().enabled = false;
+			Rigidbody2D rigid = takenObj.GetComponent<Rigidbody2D>();
+			takenObj.GetComponent<SpriteRenderer> ().color = Color.black;
+			rigid.isKinematic = false;
+			rigid.AddForce (dir * 15f, ForceMode2D.Impulse);
+
+			takenObj = null;
 
 		}
 

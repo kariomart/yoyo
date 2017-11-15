@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - bullet
   - grapple
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -22,8 +23,8 @@ TagManager:
   - Yoyo
   - Enemy
   - Bullet
-  - 
-  - 
+  - Shield
+  - Grapple
   - 
   - 
   - 

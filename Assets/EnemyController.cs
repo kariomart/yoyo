@@ -29,9 +29,9 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		int rand = Random.Range (0, 300);
+		int rand = Random.Range (0, 150);
 
-		Debug.Log (Vector2.Distance (transform.position, player.transform.position));
+		//Debug.Log (Vector2.Distance (transform.position, player.transform.position));
 		if (rand == 1 && !taken && Vector2.Distance(transform.position, player.transform.position) < shootingDistance) {
 
 			Shoot ();

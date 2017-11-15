@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 4027985592140742}
   - component: {fileID: 61374217641304512}
   - component: {fileID: 114229923050141832}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -100,7 +100,7 @@ BoxCollider2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1250474810867076}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -173,6 +173,8 @@ MonoBehaviour:
   bullet: {fileID: 1904516684519526, guid: 8b4dcc36659a048eba470c27a09fb6c6, type: 2}
   playerController: {fileID: 0}
   bulletSpd: 0.3
+  shootingDistance: 8
+  shield: {fileID: 61374217641304512}
 --- !u!212 &212435483047086932
 SpriteRenderer:
   m_ObjectHideFlags: 1
