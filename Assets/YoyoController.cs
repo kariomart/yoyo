@@ -17,7 +17,10 @@ public class YoyoController : MonoBehaviour {
 	public float accel;
 	public float maxSpeed;
 	public float maxDistance;
+
 	public bool comingBack;
+
+	public GameObject grapplePoint;
 
 
 	// Use this for initialization
@@ -37,39 +40,47 @@ public class YoyoController : MonoBehaviour {
 	void FixedUpdate() {
 
 		//Debug.Log ("coming back " + comingBack);
+		if (!playerController.grappling) {
 
-		float dis = Vector2.Distance (player.transform.position, transform.position);
+			float dis = Vector2.Distance (player.transform.position, transform.position);
 
-		if (dis > maxDistance && !comingBack) {
-			comingBack = true;
+			if (dis > maxDistance && !comingBack) {
+				comingBack = true;
+			}
+
+			if (comingBack) {
+				dir = (player.transform.position - transform.position).normalized;
+			}
+			//Debug.Log (dis);
+			vel = new Vector2 (dir.x + accel, dir.y + accel);
+
+
+
+			vel.x = Mathf.Max (Mathf.Min (vel.x, maxSpeed), -maxSpeed);
+			vel.y = Mathf.Max (Mathf.Min (vel.y, maxSpeed), -maxSpeed);
+
+			rb.MovePosition ((Vector2)transform.position + vel);
+
+
+
+			if (dis < 1 && comingBack) {
+
+				vel = Vector2.zero;
+				//			Debug.Log ("got back");
+				comingBack = false;
+				transform.position = player.transform.position;
+				this.gameObject.SetActive (false);
+				player.GetComponent<PlayerMovement> ().yoyoing = false;
+
+			}
 		}
+			
 
-		if (comingBack) {
-			dir = (player.transform.position - transform.position).normalized;
-		}
-		//Debug.Log (dis);
-		vel = new Vector2 (dir.x + accel, dir.y + accel);
+		if (playerController.grappling) {
 
-
-
-		vel.x = Mathf.Max(Mathf.Min(vel.x, maxSpeed), -maxSpeed);
-		vel.y = Mathf.Max(Mathf.Min(vel.y, maxSpeed), -maxSpeed);
-
-		rb.MovePosition ((Vector2)transform.position + vel);
-
-
-		if (dis < 1 && comingBack) {
-
-			vel = Vector2.zero;
-			//			Debug.Log ("got back");
-			comingBack = false;
-			transform.position = player.transform.position;
-			this.gameObject.SetActive (false);
-			player.GetComponent<PlayerMovement> ().yoyoing = false;
+			transform.position = grapplePoint.transform.position;
 
 		}
-
-
 
 
 	}
@@ -81,9 +92,11 @@ public class YoyoController : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Enemy") {
 
-			//Destroy (coll.gameObject);
-			coll.GetComponent<EnemyController>().pulled = true;
-
+			if (playerController.takenObj == null) {
+				EnemyController enemy = coll.GetComponent<EnemyController> ();
+				playerController.takenObj = this.gameObject;
+				enemy.pulled = true;
+			}
 
 		}
 
@@ -92,6 +105,14 @@ public class YoyoController : MonoBehaviour {
 			jumpDir = (player.transform.position - this.transform.position).normalized;
 			Instantiate (hitParticle, transform.position, Quaternion.identity);
 			playerController.vel = jumpDir * playerController.jumpSpd;
+
+		}
+
+		if (coll.gameObject.tag == "grapple") {
+
+			playerController.grappling = true;
+			playerController.yoyoing = false;
+			grapplePoint = coll.gameObject;
 
 		}
 

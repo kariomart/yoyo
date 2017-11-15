@@ -76,7 +76,9 @@ public class PlayerMovement : MonoBehaviour {
 	Vector2[] debugPts;
 
 	public GameObject takenObj;
-
+	public bool grappling;
+	public bool goingToGrapple;
+	public float grappleSpd;
 
 
 
@@ -152,6 +154,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
 
+
 		if (health <= 0 && !gameOver) {
 
 		}
@@ -160,13 +163,22 @@ public class PlayerMovement : MonoBehaviour {
 
 	private void FixedUpdate() {
 
-
 		//Debug.Log ("vel1 " + vel + "yoyoing " + yoyoing + "grounded " + grounded);
 
-		if (dir1 != Vector2.zero && !yoyoing) {
+		if (dir1 != Vector2.zero && !yoyoing && !grappling) {
 
 			Yoyo ();
 
+		}
+
+		if (grappling && Input.GetButton (aButton)) {
+			goingToGrapple = true;
+			vel = (dir + (Vector2)(yoyo.transform.position - transform.position).normalized) * grappleSpd;
+
+		} else if (goingToGrapple || (grappling && Input.GetButtonDown("start"))) {
+			goingToGrapple = false;
+			grappling = false;
+			yoyoing = true;
 		}
 
 
@@ -199,13 +211,14 @@ public class PlayerMovement : MonoBehaviour {
 
 
 
-		if (!right && !left && !yoyoing) {
+		if (!right && !left && !yoyoing && !goingToGrapple) {
 			vel.x = 0;
 		}
 
 		jumpFlag = false;
 		shotTimer--;
 
+//		Debug.Log (vel);
 		rb.MovePosition ((Vector2)transform.position + vel * Time.fixedDeltaTime);
 		SetGrounded();
 		//bulletDir = Vector2.zero;

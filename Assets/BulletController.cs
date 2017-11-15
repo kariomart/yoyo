@@ -29,11 +29,12 @@ public class BulletController : MonoBehaviour {
 
 	}
 
-	void OnCollisionEnter2D(Collision2D coll) {
+	void OnTriggerEnter2D(Collider2D coll) {
 
 
-		if (coll.gameObject.tag == "Stage") {
-			Destroy (this.gameObject);
+		if (coll.gameObject.tag == "Player") {
+			
+			Application.LoadLevel(Application.loadedLevel);
 		}
 
 

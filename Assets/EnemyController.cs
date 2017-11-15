@@ -8,10 +8,14 @@ public class EnemyController : MonoBehaviour {
 	public bool taken;
 	public Transform yoyo;
 	public GameObject player;
+	public GameObject bullet;
 	public PlayerMovement playerController;
 	BoxCollider2D collider;
 	Rigidbody2D rigid;
+	public float bulletSpd;
+	public float shootingDistance;
 
+	public BoxCollider2D shield;
 	// Use this for initialization
 	void Start () {
 			
@@ -20,10 +24,20 @@ public class EnemyController : MonoBehaviour {
 		playerController = player.GetComponent<PlayerMovement> ();
 		collider = GetComponent<BoxCollider2D> ();
 		rigid = GetComponent<Rigidbody2D> ();
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		int rand = Random.Range (0, 300);
+
+		Debug.Log (Vector2.Distance (transform.position, player.transform.position));
+		if (rand == 1 && !taken && Vector2.Distance(transform.position, player.transform.position) < shootingDistance) {
+
+			Shoot ();
+
+		}
+
 		
 	}
 
@@ -47,8 +61,19 @@ public class EnemyController : MonoBehaviour {
 			playerController.takenObj = this.gameObject;
 			collider.enabled = false;
 			rigid.isKinematic = true;
+			shield.enabled = true;
 
 		}
+
+
+	}
+
+	void Shoot() {
+
+		GameObject tempBullet = Instantiate (bullet, transform.position, Quaternion.identity);
+		BulletController bulletController = tempBullet.GetComponent<BulletController> ();
+
+		bulletController.vel = (player.transform.position - transform.position).normalized * bulletSpd;
 
 
 	}
