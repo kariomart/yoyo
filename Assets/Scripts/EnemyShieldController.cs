@@ -17,12 +17,14 @@ public class EnemyShieldController : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D coll) {
 
-		if (coll.gameObject.tag == "Bullet") {
+		if (coll.gameObject.tag == "Bullet" || coll.gameObject.tag == "Enemy") {
 
 			Destroy (coll.gameObject);
 			Destroy (this.transform.parent.gameObject);
 
 		}
+
+
 
 
 	}

@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviour {
 	public float airMaxSpd;
 	public float runAccel;
 	public float airAccel;
+	public float drag;
 	public Transform sprite;
 	//bool spinning;
 	//public float spinSpd;
@@ -246,6 +247,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void updateTimer() {
+		
 		float t = (float)System.Math.Round (Time.time - startTime, 2);
 		timer.text = "TIME: " + t;
 
@@ -288,7 +290,7 @@ public class PlayerMovement : MonoBehaviour {
 //		}
 //
 //		melee.transform.eulerAngles = new Vector3 (melee.transform.eulerAngles.x, melee.transform.eulerAngles.y, Geo.ToAng (dir)); 
-		melee.SetActive (true);
+		//melee.SetActive (true);
 
 		if (takenObj != null) {
 

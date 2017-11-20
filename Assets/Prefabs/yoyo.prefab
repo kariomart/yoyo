@@ -99,12 +99,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b72b619ac86e4fd5b4e18dedf2688db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitParticle: {fileID: 0}
   vel: {x: -0.5, y: -0.5}
   dir: {x: -0.7071048, y: -0.70710886}
   spd: 0
   accel: 0.0025
   maxSpeed: 0.5
   maxDistance: 5
+  comingBack: 0
+  grapplePoint: {fileID: 0}
 --- !u!212 &212361773787293710
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -22,6 +22,8 @@ public class YoyoController : MonoBehaviour {
 
 	public GameObject grapplePoint;
 
+	public AudioClip bounce;
+
 
 	// Use this for initialization
 	void Start () {
@@ -56,8 +58,7 @@ public class YoyoController : MonoBehaviour {
 
 
 
-			vel.x = Mathf.Max (Mathf.Min (vel.x, maxSpeed), -maxSpeed);
-			vel.y = Mathf.Max (Mathf.Min (vel.y, maxSpeed), -maxSpeed);
+			vel = vel.normalized * Mathf.Min (vel.magnitude, maxSpeed);
 
 			rb.MovePosition ((Vector2)transform.position + vel);
 
@@ -88,6 +89,7 @@ public class YoyoController : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll) {
 
 		Vector2 jumpDir;
+		SoundController.me.PlaySound (bounce, .2f);
 		comingBack = true;
 
 		if (coll.gameObject.tag == "Enemy") {
