@@ -90,7 +90,7 @@ public class YoyoController : MonoBehaviour {
 
 			if (dis < 1 && comingBack) {
 
-				deactivateYoyo ();
+				DeactivateYoyo ();
 
 			}
 		}
@@ -153,19 +153,19 @@ public class YoyoController : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Player" && comingBack) {
 
-			deactivateYoyo ();
+			DeactivateYoyo ();
 
 		}
 
 	}
 
-	public void deactivateYoyo() {
+	public void DeactivateYoyo() {
 		
 		vel = Vector2.zero;
 		//			Debug.Log ("got back");
 		comingBack = false;
 		transform.position = player.transform.position;
-		this.gameObject.SetActive (false);
+		gameObject.SetActive (false);
 		player.GetComponent<PlayerMovement> ().yoyoing = false;
 
 

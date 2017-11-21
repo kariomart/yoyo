@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using InControl;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -85,8 +86,10 @@ public class PlayerMovement : MonoBehaviour {
 	public Text timer;
 	float startTime;
 
+    InputDevice dev;
 
-
+    bool freshYoyo;
+    Vector2 prevRStick;
 
 	// Use this for initialization
 	void Start () {
@@ -108,10 +111,10 @@ public class PlayerMovement : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.R) || Input.GetButtonDown("start") || transform.position.y < -10f) {
 			Application.LoadLevel(Application.loadedLevel);
 		}
-
-		trigger = Input.GetAxis (rightTrigger) == 1;
-		right = Input.GetAxis (leftStickH) > 0 || Input.GetKeyDown(KeyCode.RightArrow);
-		left = Input.GetAxis (leftStickH) < 0 || Input.GetKeyDown(KeyCode.LeftArrow);
+        dev = InputManager.ActiveDevice;
+        trigger = dev.RightTrigger > .75f;//Input.GetAxis (rightTrigger) == 1;
+		right = dev.LeftStick.X > 0;
+		left = dev.LeftStick.X < 0;
 		//right = Input.GetKeyDown(KeyCode.RightArrow);
 		//left = Input.GetKeyDown(KeyCode.LeftArrow);
 
@@ -121,17 +124,19 @@ public class PlayerMovement : MonoBehaviour {
 
 
 
-		dir = new Vector2 (Input.GetAxis (leftStickH), Input.GetAxis (leftStickV));
+		dir = new Vector2 (dev.LeftStickX, dev.LeftStickY);
 		dir.Normalize ();
 
-		dir1 = new Vector2 (Input.GetAxis (rightStickH), Input.GetAxis (rightStickV));
+		dir1 = new Vector2 (dev.RightStickX, dev.RightStickY);
 
 		if (dir1.magnitude > 1) {
 			dir1.Normalize ();
 		}
 		if (dir1.magnitude < .25f) {
 			dir1 = Vector2.zero;
-		}
+		} else if (prevRStick == Vector2.zero) {
+            freshYoyo = true;
+        }
 		//Debug.Log (dir1);
 
 		if (Input.GetButtonDown(aButton) || Input.GetKeyDown(KeyCode.Space)) {
@@ -139,13 +144,13 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 
-		if (Input.GetButtonDown (xButton) || Input.GetKeyDown(shootKey)) {
+		if (dev.Action2.WasPressed){//Input.GetButtonDown (xButton) || Input.GetKeyDown(shootKey)) {
 
 			//ShootBullet ();
 
 		}
 
-		if (Input.GetButtonDown (yButton)) {
+		if (dev.Action4.WasPressed) {
 
 			Melee ();
 
@@ -166,23 +171,19 @@ public class PlayerMovement : MonoBehaviour {
 		if (health <= 0 && !gameOver) {
 
 		}
-
+        prevRStick = dir1;
 	}
 
 	private void FixedUpdate() {
+        SetGrounded();
+        updateTimer();
 
-		updateTimer ();
-		//Debug.Log ("vel1 " + vel + "yoyoing " + yoyoing + "grounded " + grounded);
-		//Debug.Log(vel);
-
-		if (dir1 != Vector2.zero && !yoyoing && !grappling) {
-
+		if (dir1 != Vector2.zero && !yoyoing && !grappling && freshYoyo) {
 			Yoyo ();
-
 		}
 			
 
-		if (grappling && Input.GetButton (aButton)) {
+		if (grappling && dev.Action1.IsPressed) {
 			float dis = Vector2.Distance (yoyo.transform.position, transform.position);
 
 
@@ -192,7 +193,7 @@ public class PlayerMovement : MonoBehaviour {
 				vel = (dir + (Vector2)(yoyo.transform.position - transform.position).normalized) * grappleSpd;
 			}
 
-		} else if (goingToGrapple || (grappling && Input.GetButtonDown(xButton))) {
+		} else if (goingToGrapple || (grappling && dev.Action2.WasPressed)) {
 			goingToGrapple = false;
 			grappling = false;
 			yoyoing = true;
@@ -207,12 +208,6 @@ public class PlayerMovement : MonoBehaviour {
 			accel = airAccel;
 			mx = airMaxSpd;
 		}
-
-//		if (vel.y < 0 && !yoyoing) {
-//			Debug.Log ("test");
-//			vel.y -= unjumpBonusGrav * Time.fixedDeltaTime;
-//		}
-//		Debug.Log (vel.y);
 
 		if (right && !trigger) {
 			vel.x += accel * Time.fixedDeltaTime;
@@ -234,20 +229,10 @@ public class PlayerMovement : MonoBehaviour {
 
 		jumpFlag = false;
 		shotTimer--;
-		if (!grounded) {
+		if (grounded && vel.y < 0) {
 			vel.y = 0;
-
 		}
-//		Debug.Log (vel);
 		rb.MovePosition ((Vector2)transform.position + vel * Time.fixedDeltaTime);
-		SetGrounded();
-		//bulletDir = Vector2.zero;
-
-
-		//reticle.transform.position = new Vector2 (shootPt.transform.position.x + (dir.x * 1f), shootPt.transform.position.y + (dir.y * 1f));
-
-
-
 	}
 
 	void updateTimer() {
@@ -277,6 +262,7 @@ public class PlayerMovement : MonoBehaviour {
 		//yoyoController.maxDistance = 5f * dir1.magnitude;
 		//yoyoController.maxSpeed = .5f * dir1.magnitude;
 		yoyo.SetActive (true);
+        freshYoyo = false;
 
 	}
 
@@ -342,7 +328,7 @@ public class PlayerMovement : MonoBehaviour {
 		//		Debug.Log (grounded); 
 
 		if (grounded) {
-			vel.y = 0;
+			vel.y = Mathf.Max(0, vel.y);
 			safety = true;
 		}
 	}
