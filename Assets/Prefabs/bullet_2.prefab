@@ -72,7 +72,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4016595191243170}
   - component: {fileID: 212785552762581394}
-  - component: {fileID: 114079220402214784}
   - component: {fileID: 61896401132947116}
   - component: {fileID: 50512949704334678}
   - component: {fileID: 96812376689437372}
@@ -274,43 +273,6 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
---- !u!114 &114079220402214784
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1839945566560750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcc96b77c8bf14287a23976fae1b56aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spd: 30
-  dmg: 1
-  rb: {fileID: 50512949704334678}
-  sprite: {fileID: 0}
-  decayTime: 3
-  decayed: 0
-  vel: {x: 0, y: 0}
-  bounceCount: 0
-  hitObjectEffect: {fileID: 198592399936043204, guid: 4ffd42171980e4f8db204a4b4b941131,
-    type: 2}
-  shoot: {fileID: 198592399936043204, guid: fa395ce8a0eb84cf1bac49210a761c28, type: 2}
-  hitPlayerEffect: {fileID: 198879953896607122, guid: 60b7795f8982e4b698d7c41cad3942ad,
-    type: 2}
-  trail: {fileID: 198524087329415024}
-  playerHit: {fileID: 8300000, guid: 92ca2b0e09cdf445396ba320841c094e, type: 3}
-  bounce: {fileID: 8300000, guid: aa8c02c47222e41aab39513fa1d2d356, type: 3}
-  tick: {fileID: 8300000, guid: 548f528d60d904394884b7fb66eb2b2b, type: 3}
-  decayEffect: {fileID: 1596854972051402}
-  middle: {fileID: 198974404975619110}
-  decayColor:
-    r: 0.45882356
-    g: 0.454902
-    b: 0.454902
-    a: 1
-  DamageFlash: {fileID: 1205475668460300, guid: 2a8990c37c69a4ad69b3418fcbad3cc4,
-    type: 2}
 --- !u!114 &114466049981392110
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -7,6 +7,7 @@ public class SoundController : MonoBehaviour {
 	public static SoundController me;
 	public GameObject audSource;
 	public AudioSource[] audSources;
+	public GameObject audSourcesParent;
 
 	void Update() {
 
@@ -21,10 +22,13 @@ public class SoundController : MonoBehaviour {
 
 
 	void Start () {
+		audSourcesParent = GameObject.Find ("AudioSources");
+
 		audSources = new AudioSource[32];
 
 		for (int i = 0; i < audSources.Length; i++) {
 			audSources [i] = (Instantiate (audSource, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<AudioSource>();
+			audSources [i].transform.parent = audSourcesParent.transform;
 
 		}
 

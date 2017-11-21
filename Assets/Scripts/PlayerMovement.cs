@@ -112,9 +112,10 @@ public class PlayerMovement : MonoBehaviour {
 		trigger = Input.GetAxis (rightTrigger) == 1;
 		right = Input.GetAxis (leftStickH) > 0 || Input.GetKeyDown(KeyCode.RightArrow);
 		left = Input.GetAxis (leftStickH) < 0 || Input.GetKeyDown(KeyCode.LeftArrow);
-
 		//right = Input.GetKeyDown(KeyCode.RightArrow);
 		//left = Input.GetKeyDown(KeyCode.LeftArrow);
+
+
 
 
 
@@ -124,6 +125,7 @@ public class PlayerMovement : MonoBehaviour {
 		dir.Normalize ();
 
 		dir1 = new Vector2 (Input.GetAxis (rightStickH), Input.GetAxis (rightStickV));
+
 		if (dir1.magnitude > 1) {
 			dir1.Normalize ();
 		}
@@ -170,16 +172,15 @@ public class PlayerMovement : MonoBehaviour {
 	private void FixedUpdate() {
 
 		updateTimer ();
-
 		//Debug.Log ("vel1 " + vel + "yoyoing " + yoyoing + "grounded " + grounded);
+		//Debug.Log(vel);
 
 		if (dir1 != Vector2.zero && !yoyoing && !grappling) {
 
 			Yoyo ();
 
 		}
-
-
+			
 
 		if (grappling && Input.GetButton (aButton)) {
 			float dis = Vector2.Distance (yoyo.transform.position, transform.position);
@@ -233,7 +234,10 @@ public class PlayerMovement : MonoBehaviour {
 
 		jumpFlag = false;
 		shotTimer--;
+		if (!grounded) {
+			vel.y = 0;
 
+		}
 //		Debug.Log (vel);
 		rb.MovePosition ((Vector2)transform.position + vel * Time.fixedDeltaTime);
 		SetGrounded();
@@ -268,11 +272,10 @@ public class PlayerMovement : MonoBehaviour {
 
 	public void Yoyo() {
 
-		//		Debug.Log ("yoyod");
 		yoyoing = true;
 		yoyoController.SetVelo (dir1);
-		yoyoController.maxDistance = 5f * dir1.magnitude;
-		yoyoController.maxSpeed = .5f * dir1.magnitude;
+		//yoyoController.maxDistance = 5f * dir1.magnitude;
+		//yoyoController.maxSpeed = .5f * dir1.magnitude;
 		yoyo.SetActive (true);
 
 	}
@@ -335,16 +338,12 @@ public class PlayerMovement : MonoBehaviour {
 		debugPts[0] = pt1;
 		debugPts[1] = pt2;
 		bool prevGrounded = grounded;
-		//grounded = Physics2D.OverlapArea(pt1, pt2, LayerMask.GetMask("Pinata")) != null;
 		grounded = Physics2D.OverlapArea(pt1, pt2, LayerMask.GetMask("Platform")) != null;
-		//		Debug.Log (grounded);
+		//		Debug.Log (grounded); 
 
 		if (grounded) {
 			vel.y = 0;
 			safety = true;
-			if (!prevGrounded) {
-				//scaleSpd = -.1f;
-			}
 		}
 	}
 
