@@ -19,7 +19,7 @@ public class EnemyController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 			
-		yoyo = GameObject.Find ("yoyo").transform;
+		//yoyo = GameObject.Find ("yoyo").transform;
 		player = GameObject.Find ("Player");
 		playerController = player.GetComponent<PlayerMovement> ();
 		collider = GetComponent<BoxCollider2D> ();

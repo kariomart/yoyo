@@ -91,6 +91,8 @@ public class PlayerMovement : MonoBehaviour {
     bool freshYoyo;
     Vector2 prevRStick;
 
+	//public float drag;
+
 	// Use this for initialization
 	void Start () {
 
@@ -134,7 +136,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (dir1.magnitude < .25f) {
 			dir1 = Vector2.zero;
-		} else if (prevRStick == Vector2.zero) {
+		} else if (/*prevRStick == Vector2.zero ||*/ yoyoController.beingHeld) {
             freshYoyo = true;
         }
 		//Debug.Log (dir1);
@@ -177,8 +179,9 @@ public class PlayerMovement : MonoBehaviour {
 	private void FixedUpdate() {
         SetGrounded();
         updateTimer();
+		CheckForYoyoReturn ();
 
-		if (dir1 != Vector2.zero && !yoyoing && !grappling && freshYoyo) {
+		if (dir1 != Vector2.zero && freshYoyo) {
 			Yoyo ();
 		}
 			
@@ -223,8 +226,8 @@ public class PlayerMovement : MonoBehaviour {
 
 
 
-		if (!right && !left && !yoyoing && !goingToGrapple) {
-			vel.x = 0;
+		if (!right && !left) {
+			vel.x = Mathf.MoveTowards(vel.x, 0, drag);
 		}
 
 		jumpFlag = false;
@@ -232,6 +235,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (grounded && vel.y < 0) {
 			vel.y = 0;
 		}
+
 		rb.MovePosition ((Vector2)transform.position + vel * Time.fixedDeltaTime);
 	}
 
@@ -239,6 +243,31 @@ public class PlayerMovement : MonoBehaviour {
 		
 		float t = (float)System.Math.Round (Time.time - startTime, 2);
 		timer.text = "TIME: " + t;
+
+	}
+
+	void CheckForYoyoReturn() {
+
+		Vector2 stickDir;
+		Vector2 yoyoPlayerDir;
+
+		stickDir = dir1.normalized;
+		yoyoPlayerDir = (yoyo.transform.position - this.transform.position).normalized;
+
+		float dotProd = Vector2.Dot (stickDir, yoyoPlayerDir);
+//		Debug.Log (dotProd);
+
+		if (dotProd <= -0.8f) {
+
+			yoyoController.comingBack = true;
+
+		} else {
+			yoyoController.comingBack = false;
+
+		}
+
+
+
 
 	}
 
@@ -257,8 +286,8 @@ public class PlayerMovement : MonoBehaviour {
 
 	public void Yoyo() {
 
-		yoyoing = true;
-		yoyoController.SetVelo (dir1);
+		yoyoController.beingHeld = false;
+		yoyoController.SetVelo (dir1 * .5f);
 		//yoyoController.maxDistance = 5f * dir1.magnitude;
 		//yoyoController.maxSpeed = .5f * dir1.magnitude;
 		yoyo.SetActive (true);
