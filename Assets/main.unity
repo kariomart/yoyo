@@ -77,15 +77,17 @@ LightmapSettings:
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
     m_PVRBounces: 2
-    m_PVRFiltering: 0
+    m_PVRFilterTypeDirect: 0
+    m_PVRFilterTypeIndirect: 0
+    m_PVRFilterTypeAO: 0
     m_PVRFilteringMode: 1
     m_PVRCulling: 1
     m_PVRFilteringGaussRadiusDirect: 1
     m_PVRFilteringGaussRadiusIndirect: 5
     m_PVRFilteringGaussRadiusAO: 2
-    m_PVRFilteringAtrousColorSigma: 1
-    m_PVRFilteringAtrousNormalSigma: 1
-    m_PVRFilteringAtrousPositionSigma: 1
+    m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+    m_PVRFilteringAtrousPositionSigmaIndirect: 2
+    m_PVRFilteringAtrousPositionSigmaAO: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -3630,7 +3632,7 @@ MonoBehaviour:
   airMaxSpd: 8
   runAccel: 108
   airAccel: 108
-  drag: 0.2
+  drag: 0.4
   sprite: {fileID: 377097702}
   knockbackAmount: 5
   bullet: {fileID: 1904516684519526, guid: 8b4dcc36659a048eba470c27a09fb6c6, type: 2}
@@ -3651,6 +3653,7 @@ MonoBehaviour:
   goingToGrapple: 0
   grappleSpd: 8
   timer: {fileID: 1631175159}
+  throwSpd: 5
 --- !u!61 &377097701
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -12140,7 +12143,7 @@ Prefab:
     - target: {fileID: 114110097196165992, guid: ebe98d524864b4190b40d7b6e6132dd5,
         type: 2}
       propertyPath: gravity
-      value: 0.015
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 114110097196165992, guid: ebe98d524864b4190b40d7b6e6132dd5,
         type: 2}

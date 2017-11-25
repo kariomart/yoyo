@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	Rigidbody2D rb;
 
-	public string rightTrigger;
+	/*public string rightTrigger;
 	public string leftTrigger;
 	public string xButton;
 	public string yButton;
@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour {
 	public string rightStickH;
 	public string rightStickV;
 
-	public string shootKey;
+	public string shootKey;*/
 
 	public float health;
 
@@ -36,8 +36,8 @@ public class PlayerMovement : MonoBehaviour {
 	public bool speed;
 	public bool yoyoing;
 
-	public Transform groundPt1;
-	public Transform groundPt2;
+	//public Transform groundPt1;
+	//public Transform groundPt2;
 	public Transform shootPt;
 	public float jumpSpd;
 	public float gravity;
@@ -90,6 +90,10 @@ public class PlayerMovement : MonoBehaviour {
 
     bool freshYoyo;
     Vector2 prevRStick;
+    int timeSinceThrow;
+    public float throwSpd;
+    public Vector2 desiredPos;
+
 
 	//public float drag;
 
@@ -99,7 +103,6 @@ public class PlayerMovement : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D>();
 		box = GetComponentInChildren<BoxCollider2D>();
 		yoyoController = yoyo.GetComponent<YoyoController> ();
-		//sprite = GetComponent<SpriteRenderer> ();
 		defSprScale = sprite.localScale;
 		debugPts = new Vector2[2];
 		defaultScale = pivot.transform.localScale;
@@ -114,11 +117,9 @@ public class PlayerMovement : MonoBehaviour {
 			Application.LoadLevel(Application.loadedLevel);
 		}
         dev = InputManager.ActiveDevice;
-        trigger = dev.RightTrigger > .75f;//Input.GetAxis (rightTrigger) == 1;
+        trigger = dev.RightTrigger > .75f;
 		right = dev.LeftStick.X > 0;
 		left = dev.LeftStick.X < 0;
-		//right = Input.GetKeyDown(KeyCode.RightArrow);
-		//left = Input.GetKeyDown(KeyCode.LeftArrow);
 
 
 
@@ -127,23 +128,26 @@ public class PlayerMovement : MonoBehaviour {
 
 
 		dir = new Vector2 (dev.LeftStickX, dev.LeftStickY);
-		dir.Normalize ();
+        if (dir.magnitude < .25f) {
+            dir = Vector2.zero;
+        } else {
+            dir.Normalize();
+        }
 
-		dir1 = new Vector2 (dev.RightStickX, dev.RightStickY);
+        dir1 = new Vector2 (dev.RightStickX, dev.RightStickY);
 
 		if (dir1.magnitude > 1) {
 			dir1.Normalize ();
 		}
 		if (dir1.magnitude < .25f) {
 			dir1 = Vector2.zero;
-		} else if (/*prevRStick == Vector2.zero ||*/ yoyoController.beingHeld) {
+		} else if (prevRStick == Vector2.zero && yoyoController.beingHeld) {
             freshYoyo = true;
         }
-		//Debug.Log (dir1);
 
-		if (Input.GetButtonDown(aButton) || Input.GetKeyDown(KeyCode.Space)) {
+		//if (Input.GetButtonDown(aButton) || Input.GetKeyDown(KeyCode.Space)) {
 			//	jumpFlag = true;
-		}
+		//}
 
 
 		if (dev.Action2.WasPressed){//Input.GetButtonDown (xButton) || Input.GetKeyDown(shootKey)) {
@@ -235,8 +239,9 @@ public class PlayerMovement : MonoBehaviour {
 		if (grounded && vel.y < 0) {
 			vel.y = 0;
 		}
-
-		rb.MovePosition ((Vector2)transform.position + vel * Time.fixedDeltaTime);
+        desiredPos = (Vector2)transform.position + vel * Time.fixedDeltaTime;
+        rb.MovePosition(desiredPos);
+        timeSinceThrow++;
 	}
 
 	void updateTimer() {
@@ -247,56 +252,56 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void CheckForYoyoReturn() {
-
+        if (timeSinceThrow < 5) {
+            return;
+        }
 		Vector2 stickDir;
 		Vector2 yoyoPlayerDir;
-
+        
 		stickDir = dir1.normalized;
-		yoyoPlayerDir = (yoyo.transform.position - this.transform.position).normalized;
+		yoyoPlayerDir = (yoyo.transform.position - transform.position).normalized;
 
 		float dotProd = Vector2.Dot (stickDir, yoyoPlayerDir);
 //		Debug.Log (dotProd);
 
 		if (dotProd <= -0.8f) {
-
+            freshYoyo = false;
 			yoyoController.comingBack = true;
 
 		} else {
 			yoyoController.comingBack = false;
 
 		}
-
-
-
-
 	}
 
 
 
 	void OnCollisionEnter2D(Collision2D coll) {
-
 		if (coll.gameObject.name == "end") {
-
 			Time.timeScale = 0;
-
 		}
-
 
 	}
 
-	public void Yoyo() {
+    private void OnCollisionStay2D(Collision2D coll) {
+        StopGoingThisWay(desiredPos - (Vector2)transform.position);
+    }
 
+    public void Yoyo() {
+        timeSinceThrow = 0;
 		yoyoController.beingHeld = false;
-		yoyoController.SetVelo (dir1 * .5f);
+        yoyoController.comingBack = false;
+        yoyoController.SetVelo ((dir1 * throwSpd) + vel);
 		//yoyoController.maxDistance = 5f * dir1.magnitude;
 		//yoyoController.maxSpeed = .5f * dir1.magnitude;
 		yoyo.SetActive (true);
         freshYoyo = false;
 
-	}
+
+    }
 
 
-	public void Melee() {
+    public void Melee() {
 
 
 		melee.GetComponent<MeleeController> ().meleeTimer = melee.GetComponent<MeleeController> ().meleeLength;
@@ -338,17 +343,20 @@ public class PlayerMovement : MonoBehaviour {
 
 			bulletController.vel = dir;
 		}
-
-
-
 	}
 
+    private void OnDrawGizmos() {
+        if (Application.isPlaying) {
+            Gizmos.DrawCube(debugPts[0], Vector3.one * .01f);
+            Gizmos.DrawCube(debugPts[1], Vector3.one * .01f);
+        }
+    }
 
 
-	void SetGrounded() {
+    void SetGrounded() {
 
-		Vector2 pt1 = transform.TransformPoint(box.offset + new Vector2(box.size.x / 2, -box.size.y / 2) + new Vector2(-.01f, 0));//(box.size / 2));
-		Vector2 pt2 = transform.TransformPoint(box.offset - (box.size / 2) + new Vector2(.01f, 0));
+		Vector2 pt1 = (Vector2)transform.TransformPoint(box.offset + new Vector2((box.size.x / 2f), -box.size.y / 2f)) + new Vector2(-.01f, 0);//(box.size / 2));
+		Vector2 pt2 = (Vector2)transform.TransformPoint(box.offset - (box.size / 2f)) + new Vector2(.01f, 0);
 
 		debugPts[0] = pt1;
 		debugPts[1] = pt2;
@@ -361,7 +369,9 @@ public class PlayerMovement : MonoBehaviour {
 			safety = true;
 		}
 	}
-
+    void StopGoingThisWay(Vector2 a) {
+        vel -= (a.normalized * Vector2.Dot(vel, a.normalized));
+    }
 
 
 }
