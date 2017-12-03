@@ -19,7 +19,7 @@ public class EnemyController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 			
-		//yoyo = GameObject.Find ("yoyo").transform;
+		yoyo = GameObject.Find ("yoyo").transform;
 		player = GameObject.Find ("Player");
 		playerController = player.GetComponent<PlayerMovement> ();
 		collider = GetComponent<BoxCollider2D> ();
@@ -32,7 +32,7 @@ public class EnemyController : MonoBehaviour {
 		int rand = Random.Range (0, 150);
 
 		//Debug.Log (Vector2.Distance (transform.position, player.transform.position));
-		if (rand == 1 && !taken && Vector2.Distance(transform.position, player.transform.position) < shootingDistance) {
+		if (rand == 1 && !taken && Vector2.Distance(transform.position, player.transform.position) < shootingDistance && !taken) {
 
 			Shoot ();
 
@@ -61,6 +61,7 @@ public class EnemyController : MonoBehaviour {
 			playerController.takenObj = this.gameObject;
 			collider.enabled = false;
 			rigid.isKinematic = true;
+			rigid.gravityScale = 0f;
 			shield.enabled = true;
 
 		}
@@ -69,6 +70,7 @@ public class EnemyController : MonoBehaviour {
 	}
 
 	void Shoot() {
+
 
 		GameObject tempBullet = Instantiate (bullet, transform.position, Quaternion.identity);
 		BulletController bulletController = tempBullet.GetComponent<BulletController> ();

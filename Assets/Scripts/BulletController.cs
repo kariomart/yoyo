@@ -30,6 +30,7 @@ public class BulletController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D coll) {
+		Destroy (this.gameObject);
 
 
 		if (coll.gameObject.tag == "Player") {

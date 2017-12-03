@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4004095757153620}
   - component: {fileID: 198524087329415024}
   - component: {fileID: 199540432764870356}
-  - component: {fileID: 114466049981392110}
   m_Layer: 0
   m_Name: trail
   m_TagString: Untagged
@@ -273,17 +272,6 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
---- !u!114 &114466049981392110
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1203565743731588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5282a6909fa434c16914240851b51a24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!198 &198127319456741904
 ParticleSystem:
   m_ObjectHideFlags: 1
