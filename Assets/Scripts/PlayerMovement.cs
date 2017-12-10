@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviour {
 	public bool gameOver;
 	public int shotCoolDown;
 	int shotTimer;
-	bool safety;
+//	bool safety;
 	public float bulletSpeed;
 
 	public Vector2 defaultScale;
@@ -89,7 +89,7 @@ public class PlayerMovement : MonoBehaviour {
 
     InputDevice dev;
 
-    bool freshYoyo;
+    public bool freshYoyo;
     Vector2 prevRStick;
     int timeSinceThrow;
     public float throwSpd;
@@ -115,9 +115,17 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		DrawYoyoString ();
+		CheckForYoyoReturn ();
 
-		if (Input.GetKeyDown(KeyCode.R) || Input.GetButtonDown("start") || transform.position.y < -20f) {
-			Application.LoadLevel(Application.loadedLevel);
+		if (Input.GetKeyDown(KeyCode.R) /*|| transform.position.y < -20f*/) {
+			//Application.LoadLevel(Application.loadedLevel);
+			transform.position = GameObject.Find("StartPos").transform.position;
+			yoyoController.beingHeld = true;
+		}
+
+		if (Input.GetButtonDown("start")) {
+			Application.LoadLevel (0);
+
 		}
         dev = InputManager.ActiveDevice;
         trigger = dev.RightTrigger > .75f;
@@ -169,6 +177,12 @@ public class PlayerMovement : MonoBehaviour {
 
 		}
 
+		if (dev.RightTrigger.WasPressed && !yoyoController.beingHeld) {
+
+			yoyoController.ReturnYoyo ();
+
+		}
+
 
 		if (Input.GetButtonDown ("start")) {
 			//Time.timeScale = 1f;
@@ -190,7 +204,6 @@ public class PlayerMovement : MonoBehaviour {
 	private void FixedUpdate() {
         SetGrounded();
         updateTimer();
-		CheckForYoyoReturn ();
 		CheckForGrapple ();
 
 		if (dir1 != Vector2.zero && freshYoyo) {
@@ -234,11 +247,13 @@ public class PlayerMovement : MonoBehaviour {
 			face = -1;
 		}
 
+		//if ((right || left) && 
+
 		vel.x = Mathf.Max(Mathf.Min(vel.x, mx), -mx);
 
 
 
-		if (!right && !left && !grappling && !grounded) {
+		if (!right && !left && !grappling && grounded) {
 			vel.x = Mathf.MoveTowards(vel.x, 0, drag);
 		}
 
@@ -249,19 +264,11 @@ public class PlayerMovement : MonoBehaviour {
 			//vel.y = 0;
 		}
 
-		if (grounded && !grappling && !right && !left) {
-			vel.x = 0;
-
-		}
 
         desiredPos = (Vector2)transform.position + vel * Time.fixedDeltaTime;
 
-		if (grappling) {
-			if (Vector2.Distance (transform.position, yoyo.transform.position)> yoyoController.maxDistance) {
 
-				//desiredPos = (Vector2)yoyo.transform.position + ((desiredPos - (Vector2)yoyo.transform.position).normalized * yoyoController.maxDistance);
-			}
-		}
+
         rb.MovePosition(desiredPos);
         timeSinceThrow++;
 	}
@@ -274,11 +281,28 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void DrawYoyoString() {
-		yoyoString.SetPosition (0, transform.position);
-		yoyoString.SetPosition (1, yoyo.transform.position);
 
+		if (yoyoController.enabled == true) {
+			Vector2 p1 = transform.position;
+			Vector2 p2 = yoyo.transform.position;
+			yoyoString.SetPosition (0, p1);
+			yoyoString.SetPosition (1, p2);
+
+			//int layer = LayerMask.NameToLayer ("Player");
+
+			Debug.DrawLine (p1, p2, Color.black);
+			RaycastHit2D stringCast = Physics2D.Raycast (p1, (p2 - p1), Vector2.Distance (p1, p2), LayerMask.GetMask ("spike"));
+//		Debug.Log (stringCast);
+
+			if (stringCast.collider != null && !yoyoController.beingHeld) {
+
+			
+				yoyoController.CutYoyo ();
+			}
+		}
 
 	}
+		
 
 	void CheckForGrapple() {
 		
@@ -288,26 +312,6 @@ public class PlayerMovement : MonoBehaviour {
 		if (dis >= (yoyoController.maxDistance - .01f)&& yoyoController.grounded && yoyo.transform.position.y > transform.position.y) {
 			//Vector2 perpVect = Geo.PerpVectL (yoyo.transform.position, transform.position);
 			StopGoingThisWay (transform.position - yoyo.transform.position);
-
-			/*if (Vector2.Dot (vel, perpVect) > 0) {
-				vel = perpVect * vel.magnitude;
-			}else if (Vector2.Dot (vel, perpVect) <= 0) {
-				vel = perpVect * -vel.magnitude;
-
-			} else {
-				vel = perpVect * Vector2.Dot (vel, perpVect);
-			}*/
-
-			//pos = (Vector2)yoyo.transform.position + ((pos - (Vector2)yoyo.transform.position).normalized * yoyoController.maxDistance);
-			//vel += (pos - (Vector2)transform.position) * 30f;
-			/*StopGoingThisWay(transform.position - yoyo.transform.position);
-			Vector3 lineVector = (yoyo.transform.position - transform.position).normalized;
-			Vector3 forceVector = Vector3.Cross (lineVector, new Vector3 (0, 0, .6f)).normalized;
-			Vector3 addedForce = r;*/
-			//rb.AddForce (new Vector2 (addedForce.x, addedForce.y));
-			//vel.x += addedForce.x;
-			//Vector2 angularVelocity = Vector2.Dot (yoyo.transform.position, transform.position);
-			// make this give certain vel instead of kill all velo
 			grappling = true;
 
 		} else {
@@ -333,7 +337,7 @@ public class PlayerMovement : MonoBehaviour {
 		float dotProd = Vector2.Dot (stickDir, yoyoPlayerDir);
 //		Debug.Log (dotProd);
 
-		if (dotProd <= -0.8f) {
+		if (dotProd <= -0.5f) {
             freshYoyo = false;
 			yoyoController.comingBack = true;
 
@@ -423,19 +427,13 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (grounded) {
 			vel.y = Mathf.Max(0, vel.y);
-			safety = true;
+			//safety = true;
 		}
 	}
 
     void StopGoingThisWay(Vector2 a) {
         vel -= (a.normalized * Vector2.Dot(vel, a.normalized));
     }
-
-	void TransferVelocity() {
-
-
-
-	}
 
 
 }

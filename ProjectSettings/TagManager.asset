@@ -9,6 +9,8 @@ TagManager:
   - bullet
   - grapple
   - Bullet
+  - spike
+  - yoyo
   layers:
   - Default
   - TransparentFX
@@ -25,7 +27,7 @@ TagManager:
   - Bullet
   - Shield
   - Grapple
-  - 
+  - spike
   - 
   - 
   - 

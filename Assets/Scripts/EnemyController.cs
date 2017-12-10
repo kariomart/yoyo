@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour {
 	Rigidbody2D rigid;
 	public float bulletSpd;
 	public float shootingDistance;
+	public int shootFreq;
 
 	public BoxCollider2D shield;
 	// Use this for initialization
@@ -29,7 +30,7 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		int rand = Random.Range (0, 150);
+		int rand = Random.Range (0, shootFreq);
 
 		//Debug.Log (Vector2.Distance (transform.position, player.transform.position));
 		if (rand == 1 && !taken && Vector2.Distance(transform.position, player.transform.position) < shootingDistance && !taken) {
@@ -47,21 +48,22 @@ public class EnemyController : MonoBehaviour {
 		if (pulled && dis > 1) {
 
 			transform.position = yoyo.position;
+			collider.enabled = false;
+			rigid.isKinematic = true;
+			rigid.gravityScale = 0f;
+
 		} 
 
 		else if (pulled && dis < 1){
 			
 			pulled = false;
 			taken = true;
-		}
+			}
 
 		if (taken) {
 
 			transform.position = (Vector2)player.transform.position + playerController.dir.normalized;
 			playerController.takenObj = this.gameObject;
-			collider.enabled = false;
-			rigid.isKinematic = true;
-			rigid.gravityScale = 0f;
 			shield.enabled = true;
 
 		}

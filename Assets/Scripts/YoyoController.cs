@@ -16,6 +16,7 @@ public class YoyoController : MonoBehaviour {
 
 	public Vector2 vel;
 	public Vector2 dir;
+	public Vector2 prevVel;
 	public float gravity;
 
 	public float jumpSpd;
@@ -43,7 +44,6 @@ public class YoyoController : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D> ();
 		player = GameObject.Find ("Player");
 		playerController = player.GetComponent<PlayerMovement> ();
-
 		beingHeld = true;
 
 
@@ -94,6 +94,7 @@ public class YoyoController : MonoBehaviour {
 		 else {
 			
             rb.MovePosition(pos + (vel * Time.fixedDeltaTime));
+			prevVel = vel;
         }
 
 
@@ -203,26 +204,20 @@ public class YoyoController : MonoBehaviour {
 	public void StageCollision() {
 		Vector2 jumpDir;
         
-		/*if (Input.GetAxis(rightTrigger) == 1) {
-
-				playerController.grappling = true;
-				playerController.yoyoing = false;
-
-				//grapplePoint = this
-
-			}
-
-			else*/ if ((player.transform.position - transform.position).magnitude < jumpRange) {
-			    jumpDir = (player.transform.position - this.transform.position).normalized;
-			    Instantiate (hitParticle, transform.position, Quaternion.identity);
-			    playerController.vel = jumpDir * jumpSpd;
+		if ((player.transform.position - transform.position).magnitude < jumpRange) {
+		    jumpDir = (player.transform.position - this.transform.position).normalized;
+		    Instantiate (hitParticle, transform.position, Quaternion.identity);
+		    playerController.vel = jumpDir * jumpSpd;
+			//vel = jumpDir * (jumpSpd * 3f);
 		    }
+			
 	}
 
 	public void ReturnYoyo() {
 
 		Vector2 playerDir = (player.transform.position - this.transform.position).normalized;
 		vel = playerDir * 20f;
+		comingBack = true;
 
 	}
 
