@@ -6,7 +6,6 @@ using InControl;
 
 public class PlayerMovement : MonoBehaviour {
 
-
 	Rigidbody2D rb;
 
 	/*public string rightTrigger;
@@ -51,11 +50,6 @@ public class PlayerMovement : MonoBehaviour {
 	public float airAccel;
 	public float drag;
 	public Transform sprite;
-	//bool spinning;
-	//public float spinSpd;
-	//public float spinDir;
-	public float knockbackAmount;
-
 
 	Vector3 defSprScale;
 	public GameObject bullet;
@@ -64,11 +58,7 @@ public class PlayerMovement : MonoBehaviour {
 	public GameObject reticle;
 	public bool gameOver;
 	public int shotCoolDown;
-	int shotTimer;
-//	bool safety;
-	public float bulletSpeed;
 
-	public Vector2 defaultScale;
 	public GameObject pivot;
 	public GameObject melee;
 	public LineRenderer yoyoString;
@@ -97,6 +87,11 @@ public class PlayerMovement : MonoBehaviour {
 
 
 	//public float drag;
+	void Awake () {
+
+
+
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -107,7 +102,6 @@ public class PlayerMovement : MonoBehaviour {
 		yoyoController = yoyo.GetComponent<YoyoController> ();
 		defSprScale = sprite.localScale;
 		debugPts = new Vector2[2];
-		defaultScale = pivot.transform.localScale;
 		startTime = Time.time;
 
 	}
@@ -143,7 +137,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
 		dir = new Vector2 (dev.LeftStickX, dev.LeftStickY);
-        if (dir.magnitude < .25f) {
+        if (dir.x < .25f) {
             dir = Vector2.zero;
         } else {
             dir.Normalize();
@@ -173,7 +167,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (dev.Action4.WasPressed && takenObj != null) {
 
-			Melee ();
+			ThrowEnemy ();
 
 		}
 
@@ -205,6 +199,7 @@ public class PlayerMovement : MonoBehaviour {
         SetGrounded();
         updateTimer();
 		CheckForGrapple ();
+		float dis = Vector2.Distance (yoyo.transform.position, transform.position);
 
 		if (dir1 != Vector2.zero && freshYoyo) {
 			Yoyo ();
@@ -212,19 +207,24 @@ public class PlayerMovement : MonoBehaviour {
 			
 
 		if (grappling && dev.Action1.IsPressed) {
-			float dis = Vector2.Distance (yoyo.transform.position, transform.position);
-
-
 			goingToGrapple = true;
+		}
 
-			if (dis < 8f) {
-				vel = (dir + (Vector2)(yoyo.transform.position - transform.position).normalized) * grappleSpd;
+		if (goingToGrapple) {
+			//vel = (dir + (Vector2)(yoyo.transform.position - transform.position).normalized) * grappleSpd;
+			if (yoyoController.maxDistance > .5f) {
+				yoyoController.maxDistance -= .5f;
 			}
+		}
 
-		} else if (goingToGrapple || (grappling && dev.Action2.WasReleased)) {
+	    if (goingToGrapple || (grappling && dev.Action2.WasReleased)) {
+			
 			goingToGrapple = false;
 			grappling = false;
 			yoyoing = true;
+			yoyoController.ReturnYoyo ();
+			yoyoController.maxDistance = yoyoController.defaultMaxDistance;
+
 		}
 
 
@@ -258,7 +258,6 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 		jumpFlag = false;
-		shotTimer--;
 
 		if (grounded && vel.y < 0) {
 			//vel.y = 0;
@@ -313,6 +312,7 @@ public class PlayerMovement : MonoBehaviour {
 			//Vector2 perpVect = Geo.PerpVectL (yoyo.transform.position, transform.position);
 			StopGoingThisWay (transform.position - yoyo.transform.position);
 			grappling = true;
+			vel += (Vector2)((yoyo.transform.position + ((transform.position - yoyo.transform.position).normalized * yoyoController.maxDistance)) - transform.position);
 
 		} else {
 			grappling = false;
@@ -358,6 +358,10 @@ public class PlayerMovement : MonoBehaviour {
 
     private void OnCollisionStay2D(Collision2D coll) {
         StopGoingThisWay(desiredPos - (Vector2)transform.position);
+
+//		if (vel.y != 0) {
+//			StopGoingThisWay (-coll.contacts [0].normal);
+//		}
     }
 
     public void Yoyo() {
@@ -374,17 +378,20 @@ public class PlayerMovement : MonoBehaviour {
     }
 
 
-    public void Melee() {
+    public void ThrowEnemy() {
 		
 
 		//Destroy (takenObj);
 //		Debug.Log(takenObj);
+
 		takenObj.GetComponent<EnemyController>().enabled = false;
 		takenObj.GetComponent<SpriteRenderer> ().color = Color.black;
+		takenObj.GetComponent<BoxCollider2D> ().enabled = true;
 		Rigidbody2D rigid = takenObj.GetComponent<Rigidbody2D>();
 		rigid.isKinematic = false;
 		rigid.gravityScale = 2f;
 		rigid.AddForce (dir * 15f, ForceMode2D.Impulse);
+
 
 		takenObj = null;
 

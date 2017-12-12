@@ -20,9 +20,9 @@ public class EnemyController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 			
-		yoyo = GameObject.Find ("yoyo").transform;
-		player = GameObject.Find ("Player");
-		playerController = player.GetComponent<PlayerMovement> ();
+		yoyo = Master.me.yoyo.transform;
+		player = Master.me.player;
+		playerController = Master.me.playerController;
 		collider = GetComponent<BoxCollider2D> ();
 		rigid = GetComponent<Rigidbody2D> ();
 
@@ -43,6 +43,7 @@ public class EnemyController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		
 		float dis = Vector2.Distance (player.transform.position, transform.position);
 
 		if (pulled && dis > 1) {
@@ -69,6 +70,8 @@ public class EnemyController : MonoBehaviour {
 		}
 
 
+
+
 	}
 
 	void Shoot() {
@@ -89,6 +92,13 @@ public class EnemyController : MonoBehaviour {
 		if (coll.gameObject.tag != "Stage" && coll.gameObject.name != "Player") {
 
 			//Destroy (this.gameObject);
+
+		}
+
+		if (coll.gameObject.tag == "Enemy") {
+
+			Destroy (this.gameObject);
+			Destroy(coll.gameObject);
 
 		}
 			

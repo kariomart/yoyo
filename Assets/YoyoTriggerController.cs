@@ -7,6 +7,7 @@ public class YoyoTriggerController : MonoBehaviour {
 	public YoyoController yoyo;
 	public LineRenderer yoyoString;
 	public GameObject fakeYoyo;
+	public GameObject hangingYoyo;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +24,7 @@ public class YoyoTriggerController : MonoBehaviour {
 
 		fakeYoyo.SetActive (true);
 		Destroy (this.gameObject);
+		Destroy (hangingYoyo);
 		//yoyo.beingHeld = true;
 		//yoyo.gameObject.transform = 
 		//yoyo.enabled = true;

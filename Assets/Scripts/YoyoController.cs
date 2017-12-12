@@ -8,6 +8,7 @@ public class YoyoController : MonoBehaviour {
 	Rigidbody2D rb;
 	GameObject player;
 	PlayerMovement playerController;
+	public static YoyoController me;
 
 	public string rightTrigger;
 
@@ -25,7 +26,9 @@ public class YoyoController : MonoBehaviour {
 	public float accel;
 	public float maxSpeed;
 	public float maxDistance;
+	public float defaultMaxDistance;
 	public float catchRange;
+	public float returnSpeed;
 
 	public bool comingBack;
 	public bool beingHeld;
@@ -45,6 +48,7 @@ public class YoyoController : MonoBehaviour {
 		player = GameObject.Find ("Player");
 		playerController = player.GetComponent<PlayerMovement> ();
 		beingHeld = true;
+		defaultMaxDistance = maxDistance;
 
 
 	}
@@ -204,11 +208,14 @@ public class YoyoController : MonoBehaviour {
 	public void StageCollision() {
 		Vector2 jumpDir;
         
-		if ((player.transform.position - transform.position).magnitude < jumpRange) {
+		if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y) {
 		    jumpDir = (player.transform.position - this.transform.position).normalized;
 		    Instantiate (hitParticle, transform.position, Quaternion.identity);
 		    playerController.vel = jumpDir * jumpSpd;
+			//vel = playerController.vel;
 			//vel = jumpDir * (jumpSpd * 3f);
+			ReturnYoyo();
+			beingHeld = true;
 		    }
 			
 	}
@@ -216,7 +223,7 @@ public class YoyoController : MonoBehaviour {
 	public void ReturnYoyo() {
 
 		Vector2 playerDir = (player.transform.position - this.transform.position).normalized;
-		vel = playerDir * 20f;
+		vel = playerDir * returnSpeed;
 		comingBack = true;
 
 	}
