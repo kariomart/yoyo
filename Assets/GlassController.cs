@@ -17,7 +17,7 @@ public class GlassController : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D coll) {
 
-		if (coll.gameObject.tag == "yoyo") {
+		if (coll.gameObject.tag == "yoyo" && !Master.me.yoyoController.beingHeld) {
 
 			Destroy (this.gameObject);
 

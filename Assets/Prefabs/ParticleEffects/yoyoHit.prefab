@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 199302567798470546}
   - component: {fileID: 114443064015413006}
   m_Layer: 0
-  m_Name: bulletWall
+  m_Name: yoyoHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1772492802083706}
   m_LocalRotation: {x: 0.00000013055931, y: -0.7071067, z: 0.7071069, w: -0.00000013026326}
-  m_LocalPosition: {x: 3.1840377, y: -0.54096055, z: -7.85}
+  m_LocalPosition: {x: 45.780575, y: -39.50883, z: -7.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -112,7 +112,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 2094657827
+  randomSeed: 1487205259
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -202,7 +202,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.47794116, g: 0.47794116, b: 0.47794116, a: 1}
+      maxColor: {r: 0.9325556, g: 0.74264705, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -556,7 +556,7 @@ ParticleSystem:
     serializedVersion: 5
     enabled: 1
     type: 4
-    angle: 25
+    angle: 33.84
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1

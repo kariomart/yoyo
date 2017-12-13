@@ -34,11 +34,12 @@ public class YoyoController : MonoBehaviour {
 	public bool beingHeld;
 	public bool chillin;
 	public bool grounded;
+	public bool sticking;
 
 	public GameObject grapplePoint;
 
-	public AudioClip bounce;
 
+	int counter = 0;
 
 
 	// Use this for initialization
@@ -55,10 +56,23 @@ public class YoyoController : MonoBehaviour {
 
 	void FixedUpdate() {
 		
+		
 		float dis = Vector2.Distance (player.transform.position, transform.position);
 
 		if (!beingHeld && !grounded){
 			vel.y -= (gravity * Time.fixedDeltaTime);
+		}
+
+		if (sticking) {
+			counter ++;
+
+			if (counter > 10) {
+				ReturnYoyo ();
+				sticking = false;
+				counter = 0;
+			}
+
+
 		}
 		Vector2 pos = transform.position;
 
@@ -92,7 +106,7 @@ public class YoyoController : MonoBehaviour {
 		if (beingHeld) {
 //			Debug.Log("held");
             vel = Vector2.zero;
-			transform.position = player.transform.position;
+			transform.position = playerController.desiredPos + (playerController.vel * Time.fixedDeltaTime); //(Vector2)player.transform.position + playerController.desiredPos;
 
 		} 
 		 else {
@@ -162,7 +176,7 @@ public class YoyoController : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D coll) {
 		
-		SoundController.me.PlaySound (bounce, .2f);
+
 		if (coll.gameObject.tag == "Enemy") {
 			if (playerController.takenObj == null) {
 				EnemyController enemy = coll.gameObject.GetComponent<EnemyController> ();
@@ -173,6 +187,10 @@ public class YoyoController : MonoBehaviour {
 		}
 
 		if (coll.gameObject.tag == "Stage") {
+			Instantiate (hitParticle, transform.position, Quaternion.identity);
+			if (!beingHeld) {
+				SoundController.me.PlaySound (Master.me.yoyoHit2, 1f);
+			}
 			StageCollision ();
 			grounded = true;
 		}
@@ -208,14 +226,15 @@ public class YoyoController : MonoBehaviour {
 	public void StageCollision() {
 		Vector2 jumpDir;
         
-		if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y) {
-		    jumpDir = (player.transform.position - this.transform.position).normalized;
-		    Instantiate (hitParticle, transform.position, Quaternion.identity);
+		if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y && !beingHeld) {
+			jumpDir = (player.transform.position - this.transform.position).normalized;
+			jumpDir.x += playerController.vel.normalized.x;
 		    playerController.vel = jumpDir * jumpSpd;
 			//vel = playerController.vel;
 			//vel = jumpDir * (jumpSpd * 3f);
-			ReturnYoyo();
-			beingHeld = true;
+			sticking = true;
+			//ReturnYoyo();
+			//beingHeld = true;
 		    }
 			
 	}

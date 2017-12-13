@@ -47,11 +47,39 @@ public class SoundController : MonoBehaviour {
 
 	{
 		//		Debug.Log (snd);
+	
+
 		int sNum = GetSourceNum ();
 		audSources [sNum].clip = snd;
 		audSources [sNum].volume = vol;
 		audSources [sNum].pitch = Time.timeScale;
 		audSources [sNum].Play ();
+	}
+
+	public void PlaySound(string clipName, float vol) {
+
+		for (int i = 0; i < Master.me.sounds.Length; i++) {
+			
+			if (Master.me.sounds[i].name == clipName) {
+				AudioClip snd = Master.me.sounds [i];
+
+
+				int sNum = GetSourceNum ();
+				audSources [sNum].clip = snd;
+				audSources [sNum].volume = vol;
+				audSources [sNum].pitch = Time.timeScale;
+				audSources [sNum].Play ();
+
+
+			} else {
+
+				Debug.Log ("could not find audio");
+
+			}
+		}
+
+
+
 	}
 
 	public void PlaySound(AudioClip snd, float vol, float pitch)

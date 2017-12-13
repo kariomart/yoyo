@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Vector2 vel;
 	Vector2 bulletDir;
 	bool jumpFlag;
-	bool grounded;
+	public bool grounded;
 
 	public bool trigger;
 	public bool right;
@@ -85,6 +85,7 @@ public class PlayerMovement : MonoBehaviour {
     public float throwSpd;
     public Vector2 desiredPos;
 
+	public GameObject throwyo;
 
 	//public float drag;
 	void Awake () {
@@ -204,28 +205,35 @@ public class PlayerMovement : MonoBehaviour {
 		if (dir1 != Vector2.zero && freshYoyo) {
 			Yoyo ();
 		}
+
+
 			
+//
+//		if (grappling && dev.Action1.IsPressed) {
+//			goingToGrapple = true;
+//		}
+//
+//		if (goingToGrapple) {
+//			//vel = (dir + (Vector2)(yoyo.transform.position - transform.position).normalized) * grappleSpd;
+//			if (yoyoController.maxDistance > .5f) {
+//				yoyoController.maxDistance -= .5f;
+//			}
+//		}
+//
+//	    if (goingToGrapple &&(grappling && dev.Action1.WasReleased)) {
+//			
+//			goingToGrapple = false;
+//			grappling = false;
+//			yoyoing = true;
+//			yoyoController.ReturnYoyo ();
+//			yoyoController.maxDistance = yoyoController.defaultMaxDistance;
+//
+//		}
 
-		if (grappling && dev.Action1.IsPressed) {
-			goingToGrapple = true;
-		}
-
-		if (goingToGrapple) {
-			//vel = (dir + (Vector2)(yoyo.transform.position - transform.position).normalized) * grappleSpd;
-			if (yoyoController.maxDistance > .5f) {
-				yoyoController.maxDistance -= .5f;
-			}
-		}
-
-	    if (goingToGrapple || (grappling && dev.Action2.WasReleased)) {
-			
-			goingToGrapple = false;
-			grappling = false;
-			yoyoing = true;
-			yoyoController.ReturnYoyo ();
-			yoyoController.maxDistance = yoyoController.defaultMaxDistance;
-
-		}
+//		if (!grappling) {
+//			yoyoController.maxDistance = yoyoController.defaultMaxDistance;
+//
+//		}
 
 
 		float accel = runAccel;
@@ -325,33 +333,53 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void CheckForYoyoReturn() {
-        if (timeSinceThrow < 5) {
-            return;
-        }
-		Vector2 stickDir;
-		Vector2 yoyoPlayerDir;
-        
-		stickDir = dir1.normalized;
-		yoyoPlayerDir = (yoyo.transform.position - transform.position).normalized;
+		if (!yoyoController.comingBack || yoyoController.beingHeld) {
 
-		float dotProd = Vector2.Dot (stickDir, yoyoPlayerDir);
+			if (timeSinceThrow < 5) {
+				return;
+			}
+			Vector2 stickDir;
+			Vector2 yoyoPlayerDir;
+        
+			stickDir = dir1.normalized;
+			yoyoPlayerDir = (yoyo.transform.position - transform.position).normalized;
+
+			float dotProd = Vector2.Dot (stickDir, yoyoPlayerDir);
 //		Debug.Log (dotProd);
 
-		if (dotProd <= -0.5f) {
-            freshYoyo = false;
-			yoyoController.comingBack = true;
+			if (dotProd <= -0.5f) {
+				freshYoyo = false;
 
-		} else {
-			yoyoController.comingBack = false;
+				if (!grappling && !yoyoController.comingBack && !yoyoController.beingHeld) {
+					SoundController.me.PlaySound (Master.me.yoyoThrow, .5f);
+				}
 
+				yoyoController.ReturnYoyo ();
+
+			} else {
+				//yoyoController.comingBack = false;
+
+			}
 		}
 	}
 
 
 
 	void OnCollisionEnter2D(Collision2D coll) {
+
+		if (grounded) {
+			Vector2 normal = coll.contacts [0].normal;
+			//transform.localEulerAngles = new Vector3 (0, 0, Geo.ToAng (normal) - 90);
+		}
+
+		//transform.localRotation 
+
 		if (coll.gameObject.name == "end") {
 			Time.timeScale = 0;
+		}
+
+		if (yoyoController.beingHeld) {
+			yoyo.transform.position = transform.position;//(Vector2)player.transform.position + playerController.desiredPos;
 		}
 
 	}
@@ -359,21 +387,27 @@ public class PlayerMovement : MonoBehaviour {
     private void OnCollisionStay2D(Collision2D coll) {
         StopGoingThisWay(desiredPos - (Vector2)transform.position);
 
+		if (yoyoController.beingHeld) {
+			yoyo.transform.position = transform.position;
+		}
+
 //		if (vel.y != 0) {
 //			StopGoingThisWay (-coll.contacts [0].normal);
 //		}
     }
 
     public void Yoyo() {
-        timeSinceThrow = 0;
-		yoyoController.beingHeld = false;
-        yoyoController.comingBack = false;
-        yoyoController.SetVelo ((dir1 * throwSpd) + vel);
-		//yoyoController.maxDistance = 5f * dir1.magnitude;
-		//yoyoController.maxSpeed = .5f * dir1.magnitude;
-		yoyo.SetActive (true);
-        freshYoyo = false;
-
+		if (yoyoController.beingHeld) {
+			SoundController.me.PlaySound (Master.me.yoyoWhoosh, .5f);
+			timeSinceThrow = 0;
+			yoyoController.beingHeld = false;
+			yoyoController.comingBack = false;
+			yoyoController.SetVelo ((dir1 * throwSpd) + vel);
+			//yoyoController.maxDistance = 5f * dir1.magnitude;
+			//yoyoController.maxSpeed = .5f * dir1.magnitude;
+			yoyo.SetActive (true);
+			freshYoyo = false;
+		}
 
     }
 
@@ -434,6 +468,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (grounded) {
 			vel.y = Mathf.Max(0, vel.y);
+
 			//safety = true;
 		}
 	}
