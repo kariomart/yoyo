@@ -6,17 +6,23 @@ public class EnemyController : MonoBehaviour {
 
 	public bool pulled;
 	public bool taken;
+	public bool thrown;
+	public bool dead;
+	public Vector2 thrownDir;
+
 	public Transform yoyo;
 	public GameObject player;
 	public GameObject bullet;
 	public PlayerMovement playerController;
 	BoxCollider2D collider;
 	Rigidbody2D rigid;
+	SpriteRenderer sprite;
 	public float bulletSpd;
 	public float shootingDistance;
 	public int shootFreq;
 
 	public BoxCollider2D shield;
+	public GameObject enemyDead;
 	// Use this for initialization
 	void Start () {
 			
@@ -25,7 +31,7 @@ public class EnemyController : MonoBehaviour {
 		playerController = Master.me.playerController;
 		collider = GetComponent<BoxCollider2D> ();
 		rigid = GetComponent<Rigidbody2D> ();
-
+		sprite = GetComponent<SpriteRenderer> ();
 	}
 	
 	// Update is called once per frame
@@ -50,8 +56,6 @@ public class EnemyController : MonoBehaviour {
 
 			transform.position = yoyo.position;
 			collider.enabled = false;
-			rigid.isKinematic = true;
-			rigid.gravityScale = 0f;
 
 		} 
 
@@ -59,13 +63,24 @@ public class EnemyController : MonoBehaviour {
 			
 			pulled = false;
 			taken = true;
-			}
+			collider.enabled = false;
+		}
 
 		if (taken) {
 
-			transform.position = (Vector2)player.transform.position + playerController.dir.normalized;
-			playerController.takenObj = this.gameObject;
+			transform.position = (Vector2)player.transform.position + playerController.untouchedLDir.normalized;
+			//playerController.takenObj = this.gameObject;
 			shield.enabled = true;
+
+		}
+
+		if (thrown) {
+			
+			pulled = false;
+			taken = false;
+			thrownDir.y -= 0.02f;
+
+			rigid.MovePosition ((Vector2)transform.position + thrownDir * .5f);
 
 		}
 
@@ -76,11 +91,12 @@ public class EnemyController : MonoBehaviour {
 
 	void Shoot() {
 
+		if (!pulled || taken || thrown) {
+			GameObject tempBullet = Instantiate (bullet, transform.position, Quaternion.identity);
+			BulletController bulletController = tempBullet.GetComponent<BulletController> ();
 
-		GameObject tempBullet = Instantiate (bullet, transform.position, Quaternion.identity);
-		BulletController bulletController = tempBullet.GetComponent<BulletController> ();
-
-		bulletController.vel = (player.transform.position - transform.position).normalized * bulletSpd;
+			bulletController.vel = (player.transform.position - transform.position).normalized * bulletSpd;
+		}
 
 
 	}
@@ -97,8 +113,17 @@ public class EnemyController : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Enemy") {
 
+			Instantiate (enemyDead, transform.position, Quaternion.identity);
 			Destroy (this.gameObject);
 			Destroy(coll.gameObject);
+
+
+		}
+
+		if (coll.gameObject.tag == "yoyo" && dead) {
+			
+			thrownDir = Master.me.yoyoController.vel * .05f;
+
 
 		}
 			

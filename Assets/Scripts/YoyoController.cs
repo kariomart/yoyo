@@ -40,6 +40,7 @@ public class YoyoController : MonoBehaviour {
 
 
 	int counter = 0;
+	public int bonusCounter = 0;
 
 
 	// Use this for initialization
@@ -102,6 +103,21 @@ public class YoyoController : MonoBehaviour {
 			transform.position = transform.position;
 			
 		}
+
+		if (playerController.bonusFrames) {
+			if (bonusCounter < 25) {
+
+				vel += playerController.dir1.normalized;
+				bonusCounter++;
+
+			} else {
+				playerController.bonusFrames = false;
+				bonusCounter = 0;
+			}
+
+
+		}
+
 			
 		if (beingHeld) {
 //			Debug.Log("held");
@@ -178,9 +194,11 @@ public class YoyoController : MonoBehaviour {
 		
 
 		if (coll.gameObject.tag == "Enemy") {
-			if (playerController.takenObj == null) {
+			
+			if (playerController.takenObj == null && !coll.gameObject.GetComponent<EnemyController> ().dead) {
 				EnemyController enemy = coll.gameObject.GetComponent<EnemyController> ();
-				playerController.takenObj = this.gameObject;
+				playerController.takenObj = coll.gameObject;
+				SoundController.me.PlaySound (Master.me.enemy1, 1f);
 				enemy.pulled = true;
 			}
 
@@ -188,9 +206,11 @@ public class YoyoController : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Stage") {
 			Instantiate (hitParticle, transform.position, Quaternion.identity);
-			if (!beingHeld) {
+
+			if (!beingHeld && !playerController.grappling) {
 				SoundController.me.PlaySound (Master.me.yoyoHit2, 1f);
 			}
+
 			StageCollision ();
 			grounded = true;
 		}
@@ -220,6 +240,10 @@ public class YoyoController : MonoBehaviour {
 
 		StopGoingThisWay (vel - (Vector2)transform.position);
 
+		if (comingBack) {
+			//comingBack = false;
+		}
+
 	}
 
 
@@ -236,6 +260,7 @@ public class YoyoController : MonoBehaviour {
 			//ReturnYoyo();
 			//beingHeld = true;
 		    }
+			
 			
 	}
 

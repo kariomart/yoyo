@@ -6,6 +6,8 @@ public class CheckpointController : MonoBehaviour {
 
 	public SpriteRenderer sprite;
 	public GameObject checkpoint;
+	public GameObject fx;
+	public bool checkpointed;
 
 	// Use this for initialization
 	void Start () {
@@ -23,10 +25,13 @@ public class CheckpointController : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll) {
 
-		if (coll.gameObject.tag == "Player" || coll.gameObject.tag == "yoyo") {
+		if ((coll.gameObject.tag == "Player" || coll.gameObject.tag == "yoyo") && !checkpointed) {
 
 			sprite.color = Color.red;
 			checkpoint.transform.position = this.transform.position;
+			Instantiate (fx, transform.position, Quaternion.identity);
+			SoundController.me.PlaySound (Master.me.checkpoint, 1f);
+			checkpointed = true;
 
 		}
 

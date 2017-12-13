@@ -8,12 +8,14 @@ public class Master : MonoBehaviour {
 	public GameObject player;
 	public GameObject yoyo;
 	public GameObject startPos;
+	public GameObject enemy;
 
 	public PlayerMovement playerController;
 	public YoyoController yoyoController;
 
 	//public List<AudioClip> sounds = new List<AudioClip> ();
 	public AudioClip[] sounds;
+	public GameObject[] spawners;
 
 	public AudioClip enemy1;
 	public AudioClip enemy2;
@@ -24,6 +26,10 @@ public class Master : MonoBehaviour {
 	public AudioClip yoyoHit2;
 	public AudioClip yoyoThrow;
 	public AudioClip yoyoWhoosh;
+	public AudioClip glass;
+	public AudioClip checkpoint;
+	public AudioClip restart;
+	public AudioClip fireworks;
 
 	// Use this for initialization
 	void Awake () {
@@ -35,6 +41,7 @@ public class Master : MonoBehaviour {
 		}
 
 		//LoadAssets ();
+		GetEnemies();
 
 		
 	}
@@ -69,6 +76,27 @@ public class Master : MonoBehaviour {
 		}
 
 		//SoundController.me.PlaySound ("enemy 1", 1);
+
+
+	}
+
+	void GetEnemies() {
+
+		spawners = GameObject.FindGameObjectsWithTag ("Spawner");
+
+	}
+
+	public void RespawnEnemies() {
+
+		foreach (GameObject spawner in spawners) {
+
+			if (spawner.transform.childCount > 0) {
+				Destroy (spawner.transform.GetChild (0).gameObject);
+			}
+			GameObject temp = Instantiate (enemy, spawner.transform.position, Quaternion.identity); 
+			temp.transform.parent = spawner.transform;
+
+		}
 
 
 	}

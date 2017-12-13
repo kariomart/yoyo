@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class GlassController : MonoBehaviour {
 
+	GameObject fx;
+
 
 	// Use this for initialization
 	void Start () {
+
+		fx = transform.GetChild (0).gameObject;
 		
 	}
 	
@@ -19,6 +23,9 @@ public class GlassController : MonoBehaviour {
 
 		if (coll.gameObject.tag == "yoyo" && !Master.me.yoyoController.beingHeld) {
 
+			SoundController.me.PlaySound (Master.me.glass, .25f);
+			fx.transform.parent = null;
+			fx.SetActive(true);
 			Destroy (this.gameObject);
 
 		}

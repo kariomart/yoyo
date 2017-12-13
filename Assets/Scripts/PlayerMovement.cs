@@ -34,6 +34,7 @@ public class PlayerMovement : MonoBehaviour {
 	public bool slow;
 	public bool speed;
 	public bool yoyoing;
+	public bool bonusFrames;
 
 	//public Transform groundPt1;
 	//public Transform groundPt2;
@@ -64,6 +65,7 @@ public class PlayerMovement : MonoBehaviour {
 	public LineRenderer yoyoString;
 
 	public Vector2 dir;
+	public Vector2 untouchedLDir;
 	public Vector2 dir1;
 	public Vector2 defaultShootingDirection = new Vector2(1, 0);
 	BoxCollider2D box;
@@ -111,24 +113,25 @@ public class PlayerMovement : MonoBehaviour {
 	void Update () {
 		DrawYoyoString ();
 		CheckForYoyoReturn ();
+//		Debug.Log (bonusFrames + " " + yoyoController.bonusCounter);
 
-		if (Input.GetKeyDown(KeyCode.R) /*|| transform.position.y < -20f*/) {
-			//Application.LoadLevel(Application.loadedLevel);
-			transform.position = GameObject.Find("StartPos").transform.position;
-			yoyoController.beingHeld = true;
+		if (Input.GetKeyDown(KeyCode.R)) {
+			Application.LoadLevel (0);
 		}
 
 		if (Input.GetButtonDown("start")) {
-			Application.LoadLevel (0);
-
+			GoToCheckPoint ();
+			yoyoController.beingHeld = true;
 		}
+
         dev = InputManager.ActiveDevice;
         trigger = dev.RightTrigger > .75f;
 		right = dev.LeftStick.X > 0;
 		left = dev.LeftStick.X < 0;
 
 		if (dev.Action2.WasPressed) {
-			
+
+			GoToCheckPoint ();
 			yoyoController.CutYoyo ();
 
 		}
@@ -138,6 +141,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
 		dir = new Vector2 (dev.LeftStickX, dev.LeftStickY);
+		untouchedLDir = new Vector2 (dev.LeftStickX, dev.LeftStickY);
         if (dir.x < .25f) {
             dir = Vector2.zero;
         } else {
@@ -205,6 +209,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (dir1 != Vector2.zero && freshYoyo) {
 			Yoyo ();
 		}
+			
 
 
 			
@@ -234,8 +239,7 @@ public class PlayerMovement : MonoBehaviour {
 //			yoyoController.maxDistance = yoyoController.defaultMaxDistance;
 //
 //		}
-
-
+	
 		float accel = runAccel;
 		float mx = runMaxSpd;
 
@@ -303,7 +307,7 @@ public class PlayerMovement : MonoBehaviour {
 
 			if (stringCast.collider != null && !yoyoController.beingHeld) {
 
-			
+				GoToCheckPoint ();
 				yoyoController.CutYoyo ();
 			}
 		}
@@ -333,7 +337,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void CheckForYoyoReturn() {
-		if (!yoyoController.comingBack || yoyoController.beingHeld) {
+		if ((!yoyoController.comingBack || yoyoController.beingHeld) && yoyoController.enabled) {
 
 			if (timeSinceThrow < 5) {
 				return;
@@ -370,6 +374,11 @@ public class PlayerMovement : MonoBehaviour {
 		if (grounded) {
 			Vector2 normal = coll.contacts [0].normal;
 			//transform.localEulerAngles = new Vector3 (0, 0, Geo.ToAng (normal) - 90);
+
+		}
+		if (!grounded) {
+			SoundController.me.PlaySound (Master.me.foot2, 1f);
+
 		}
 
 		//transform.localRotation 
@@ -398,6 +407,7 @@ public class PlayerMovement : MonoBehaviour {
 
     public void Yoyo() {
 		if (yoyoController.beingHeld) {
+			bonusFrames = true;
 			SoundController.me.PlaySound (Master.me.yoyoWhoosh, .5f);
 			timeSinceThrow = 0;
 			yoyoController.beingHeld = false;
@@ -415,20 +425,30 @@ public class PlayerMovement : MonoBehaviour {
     public void ThrowEnemy() {
 		
 
-		//Destroy (takenObj);
-//		Debug.Log(takenObj);
-
-		takenObj.GetComponent<EnemyController>().enabled = false;
+		EnemyController enemy = takenObj.GetComponent<EnemyController> ();
+		enemy.enabled = false;
+		enemy.thrownDir = (untouchedLDir.normalized);
+		enemy.thrown = true;
+		enemy.dead = true;
+		enemy.enabled = true;
 		takenObj.GetComponent<SpriteRenderer> ().color = Color.black;
 		takenObj.GetComponent<BoxCollider2D> ().enabled = true;
-		Rigidbody2D rigid = takenObj.GetComponent<Rigidbody2D>();
-		rigid.isKinematic = false;
-		rigid.gravityScale = 2f;
-		rigid.AddForce (dir * 15f, ForceMode2D.Impulse);
-
-
+		SoundController.me.PlaySound (Master.me.enemy3, 1f);
+		//Destroy (takenObj, 5);
 		takenObj = null;
 
+
+	}
+
+	public void GoToCheckPoint() {
+
+		SoundController.me.PlaySound (Master.me.restart, 1f);
+		vel = Vector2.zero;
+		yoyoController.beingHeld = true;
+		transform.position = GameObject.Find("StartPos").transform.position;
+		Master.me.RespawnEnemies ();
+		takenObj = null;
+		//yoyo.transform.position = new Vector3(transform.position.x, transform.position.y + 3, transform.position.z);
 
 	}
 
@@ -446,6 +466,7 @@ public class PlayerMovement : MonoBehaviour {
 			bulletController.vel = dir;
 		}
 	}
+
 
     private void OnDrawGizmos() {
         if (Application.isPlaying) {
