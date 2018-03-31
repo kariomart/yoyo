@@ -50,6 +50,7 @@ public class PlayerMovement : MonoBehaviour {
 	public float runAccel;
 	public float airAccel;
 	public float drag;
+	public float swingSpeedScale;
 	public Transform sprite;
 
 	Vector3 defSprScale;
@@ -68,7 +69,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Vector2 untouchedLDir;
 	public Vector2 dir1;
 	public Vector2 defaultShootingDirection = new Vector2(1, 0);
-	BoxCollider2D box;
+	public BoxCollider2D box;
 	Vector2[] debugPts;
 
 	public GameObject takenObj;
@@ -111,6 +112,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
 		DrawYoyoString ();
 		CheckForYoyoReturn ();
 //		Debug.Log (bonusFrames + " " + yoyoController.bonusCounter);
@@ -259,8 +261,6 @@ public class PlayerMovement : MonoBehaviour {
 			face = -1;
 		}
 
-		//if ((right || left) && 
-
 		vel.x = Mathf.Max(Mathf.Min(vel.x, mx), -mx);
 
 
@@ -303,7 +303,7 @@ public class PlayerMovement : MonoBehaviour {
 
 			Debug.DrawLine (p1, p2, Color.black);
 			RaycastHit2D stringCast = Physics2D.Raycast (p1, (p2 - p1), Vector2.Distance (p1, p2), LayerMask.GetMask ("spike"));
-//		Debug.Log (stringCast);
+
 
 			if (stringCast.collider != null && !yoyoController.beingHeld) {
 
@@ -324,7 +324,7 @@ public class PlayerMovement : MonoBehaviour {
 			//Vector2 perpVect = Geo.PerpVectL (yoyo.transform.position, transform.position);
 			StopGoingThisWay (transform.position - yoyo.transform.position);
 			grappling = true;
-			vel += (Vector2)((yoyo.transform.position + ((transform.position - yoyo.transform.position).normalized * yoyoController.maxDistance)) - transform.position);
+			vel += (Vector2)((yoyo.transform.position + ((transform.position - yoyo.transform.position).normalized * yoyoController.maxDistance)) - transform.position) * swingSpeedScale;
 
 		} else {
 			grappling = false;
@@ -470,6 +470,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void OnDrawGizmos() {
         if (Application.isPlaying) {
+			Gizmos.color = Color.black;
             Gizmos.DrawCube(debugPts[0], Vector3.one * .01f);
             Gizmos.DrawCube(debugPts[1], Vector3.one * .01f);
         }
@@ -483,13 +484,13 @@ public class PlayerMovement : MonoBehaviour {
 
 		debugPts[0] = pt1;
 		debugPts[1] = pt2;
+
 		bool prevGrounded = grounded;
 		grounded = Physics2D.OverlapArea(pt1, pt2, LayerMask.GetMask("Platform")) != null;
 		//		Debug.Log (grounded); 
 
 		if (grounded) {
 			vel.y = Mathf.Max(0, vel.y);
-
 			//safety = true;
 		}
 	}

@@ -15,6 +15,8 @@ public class YoyoController : MonoBehaviour {
 	public GameObject hitParticle;
 	public GameObject deadYoyo;
 
+	public float jumpDistanceScale;
+	public float bonusFrames;
 	public Vector2 vel;
 	public Vector2 dir;
 	public Vector2 prevVel;
@@ -105,7 +107,7 @@ public class YoyoController : MonoBehaviour {
 		}
 
 		if (playerController.bonusFrames) {
-			if (bonusCounter < 25) {
+			if (bonusCounter < bonusFrames) {
 
 				vel += playerController.dir1.normalized;
 				bonusCounter++;
@@ -250,8 +252,10 @@ public class YoyoController : MonoBehaviour {
 	public void StageCollision() {
 		Vector2 jumpDir;
         
-		if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y && !beingHeld) {
+		//if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y && !beingHeld) {
+		  if (!beingHeld && !playerController.grappling) {
 			jumpDir = (player.transform.position - this.transform.position).normalized;
+			//float jumpMag = (1 / (player.transform.position - transform.position).magnitude) * jumpDistanceScale;
 			jumpDir.x += playerController.vel.normalized.x;
 		    playerController.vel = jumpDir * jumpSpd;
 			//vel = playerController.vel;

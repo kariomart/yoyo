@@ -16,7 +16,7 @@ public class DeathNet : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll) {
 
-		if (coll.gameObject.tag == "Player") {
+		if (coll.gameObject.layer == LayerMask.NameToLayer("Player")) {
 
 			Master.me.playerController.GoToCheckPoint ();
 
