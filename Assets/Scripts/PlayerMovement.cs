@@ -113,8 +113,8 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		DrawYoyoString ();
-		CheckForYoyoReturn ();
+//		DrawYoyoString ();
+//		CheckForYoyoReturn ();
 //		Debug.Log (bonusFrames + " " + yoyoController.bonusCounter);
 
 		if (Input.GetKeyDown(KeyCode.R)) {
@@ -204,8 +204,8 @@ public class PlayerMovement : MonoBehaviour {
 
 	private void FixedUpdate() {
         SetGrounded();
-        updateTimer();
-		CheckForGrapple ();
+        //updateTimer();
+		//CheckForGrapple ();
 		float dis = Vector2.Distance (yoyo.transform.position, transform.position);
 
 		if (dir1 != Vector2.zero && freshYoyo) {
@@ -376,10 +376,10 @@ public class PlayerMovement : MonoBehaviour {
 			//transform.localEulerAngles = new Vector3 (0, 0, Geo.ToAng (normal) - 90);
 
 		}
-		if (!grounded) {
-			SoundController.me.PlaySound (Master.me.foot2, 1f);
+//		if (!grounded) {
+//			SoundController.me.PlaySound (Master.me.foot2, 1f);
 
-		}
+//		}
 
 		//transform.localRotation 
 
@@ -387,18 +387,18 @@ public class PlayerMovement : MonoBehaviour {
 			Time.timeScale = 0;
 		}
 
-		if (yoyoController.beingHeld) {
-			yoyo.transform.position = transform.position;//(Vector2)player.transform.position + playerController.desiredPos;
-		}
+//		if (yoyoController.beingHeld) {
+//			yoyo.transform.position = transform.position;//(Vector2)player.transform.position + playerController.desiredPos;
+//		}
 
 	}
 
     private void OnCollisionStay2D(Collision2D coll) {
         StopGoingThisWay(desiredPos - (Vector2)transform.position);
 
-		if (yoyoController.beingHeld) {
-			yoyo.transform.position = transform.position;
-		}
+//		if (yoyoController.beingHeld) {
+//			yoyo.transform.position = transform.position;
+//		}
 
 //		if (vel.y != 0) {
 //			StopGoingThisWay (-coll.contacts [0].normal);
