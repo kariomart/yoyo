@@ -6,7 +6,9 @@ using InControl;
 public class YoyoController : MonoBehaviour {
 
 	Rigidbody2D rb;
+	SpriteRenderer spr;
 	GameObject player;
+	public GameObject throwPt;
 	PlayerMovement playerController;
 	public static YoyoController me;
 
@@ -49,6 +51,7 @@ public class YoyoController : MonoBehaviour {
 	void Start () {
 
 		rb = GetComponent<Rigidbody2D> ();
+		spr = GetComponent<SpriteRenderer>();
 		player = GameObject.Find ("Player");
 		playerController = player.GetComponent<PlayerMovement> ();
 		beingHeld = true;
@@ -124,11 +127,13 @@ public class YoyoController : MonoBehaviour {
 		if (beingHeld) {
 //			Debug.Log("held");
             vel = Vector2.zero;
-			transform.position = playerController.desiredPos + (playerController.vel * Time.fixedDeltaTime); //(Vector2)player.transform.position + playerController.desiredPos;
+			transform.position = playerController.desiredPos + (playerController.vel * Time.fixedDeltaTime);
+			spr.enabled = false; //(Vector2)player.transform.position + playerController.desiredPos;
 
 		} 
 		 else {
 			
+			spr.enabled = true;
             rb.MovePosition(pos + (vel * Time.fixedDeltaTime));
 			prevVel = vel;
         }

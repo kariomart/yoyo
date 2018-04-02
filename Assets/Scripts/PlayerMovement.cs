@@ -89,6 +89,8 @@ public class PlayerMovement : MonoBehaviour {
     public Vector2 desiredPos;
 
 	public GameObject throwyo;
+	public GameObject arm;
+	public SpriteRenderer armSprite;
 
 	//public float drag;
 	void Awake () {
@@ -105,6 +107,7 @@ public class PlayerMovement : MonoBehaviour {
 		yoyoString = GetComponentInChildren<LineRenderer> ();
 		yoyoController = yoyo.GetComponent<YoyoController> ();
 		defSprScale = sprite.localScale;
+		armSprite = arm.GetComponent<SpriteRenderer>();
 		debugPts = new Vector2[2];
 		startTime = Time.time;
 
@@ -205,6 +208,7 @@ public class PlayerMovement : MonoBehaviour {
 	private void FixedUpdate() {
         SetGrounded();
         updateTimer();
+		rotateArm();
 		CheckForGrapple ();
 		float dis = Vector2.Distance (yoyo.transform.position, transform.position);
 
@@ -294,7 +298,7 @@ public class PlayerMovement : MonoBehaviour {
 	void DrawYoyoString() {
 
 		if (yoyoController.enabled == true) {
-			Vector2 p1 = transform.position;
+			Vector2 p1 = shootPt.transform.position;
 			Vector2 p2 = yoyo.transform.position;
 			yoyoString.SetPosition (0, p1);
 			yoyoString.SetPosition (1, p2);
@@ -310,6 +314,46 @@ public class PlayerMovement : MonoBehaviour {
 				GoToCheckPoint ();
 				yoyoController.CutYoyo ();
 			}
+		}
+
+	}
+
+	void rotateArm() {
+		float aimAngle;
+
+
+		if (dir1 == Vector2.zero) {
+			aimAngle = 0;
+			arm.transform.eulerAngles = new Vector3(0, 0, 0);	
+		} else {
+			aimAngle = Geo.ToAng(dir1.normalized) + 90f;
+			arm.transform.eulerAngles = new Vector3(0, 0, aimAngle);
+		}
+
+		float z = arm.transform.eulerAngles.z;
+		//Debug.Log(z + " " + aimAngle);
+		if (z <= 360 && z >= 180 || z == 0) {
+			armSprite.flipX = false;
+		} else {
+			armSprite.flipX = true;
+		}
+
+		if (face == -1) {
+			armSprite.flipX = true;
+		}
+
+		Vector3 pos = arm.transform.localPosition;
+
+		if (face == 1) {
+			arm.transform.localPosition = new Vector3(-0.168f, pos.y, pos.z);
+		}if (face == -1) {
+			arm.transform.localPosition = new Vector3(0.154f, pos.y, pos.z);
+		}
+
+		if (!yoyoController.beingHeld) {
+			float dirAngle = Geo.ToAng(yoyo.transform.position - shootPt.transform.position);
+			Debug.Log(dirAngle);
+			arm.transform.eulerAngles = new Vector3(0, 0, dirAngle + 90f);
 		}
 
 	}
