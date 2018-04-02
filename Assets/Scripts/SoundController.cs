@@ -22,7 +22,7 @@ public class SoundController : MonoBehaviour {
 
 
 	void Start () {
-		//audSourcesParent = GameObject.Find ("AudioSources");
+		audSourcesParent = GameObject.Find ("AudioSources");
 
 		audSources = new AudioSource[32];
 
