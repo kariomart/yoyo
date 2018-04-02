@@ -352,7 +352,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (!yoyoController.beingHeld) {
 			float dirAngle = Geo.ToAng(yoyo.transform.position - shootPt.transform.position);
-			Debug.Log(dirAngle);
+//			Debug.Log(dirAngle);
 			arm.transform.eulerAngles = new Vector3(0, 0, dirAngle + 90f);
 		}
 
