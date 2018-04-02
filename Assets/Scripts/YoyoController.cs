@@ -252,8 +252,8 @@ public class YoyoController : MonoBehaviour {
 	public void StageCollision() {
 		Vector2 jumpDir;
         
-		//if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y && !beingHeld) {
-		  if (!beingHeld && !playerController.grappling) {
+		if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y && !beingHeld) {
+		  //if (!beingHeld && !playerController.grappling) {
 			jumpDir = (player.transform.position - this.transform.position).normalized;
 			//float jumpMag = (1 / (player.transform.position - transform.position).magnitude) * jumpDistanceScale;
 			jumpDir.x += playerController.vel.normalized.x;

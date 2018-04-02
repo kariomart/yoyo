@@ -5,11 +5,13 @@ using UnityEngine;
 public class AnimationController : MonoBehaviour {
 
 	Animator anim;
+	SpriteRenderer spr;
 	PlayerMovement player;
 
 	void Start () {
 
 		anim = GetComponent<Animator>();
+		spr = GetComponent<SpriteRenderer>();
 		player = GetComponentInParent<PlayerMovement>();
 		
 
@@ -18,7 +20,14 @@ public class AnimationController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		anim.SetFloat("Movement", player.vel.x);
+		anim.SetFloat("Speed", Mathf.Abs(player.vel.x));
+		anim.SetBool("Grounded", player.grounded);
+
+		if (player.face == -1) {
+			spr.flipX = true;
+		} else {
+			spr.flipX = false;
+		}
 		
 	}
 }

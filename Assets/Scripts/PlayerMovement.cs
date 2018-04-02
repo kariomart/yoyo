@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour {
 	public float gravity;
 	public float unjumpBonusGrav;
 
-	int face;
+	public int face;
 	int jmpTimer;
 	public float runMaxSpd;
 	public float airMaxSpd;
@@ -372,7 +372,7 @@ public class PlayerMovement : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D coll) {
 
 		if (grounded) {
-			Vector2 normal = coll.contacts [0].normal;
+			//Vector2 normal = coll.contacts [0].normal;
 			//transform.localEulerAngles = new Vector3 (0, 0, Geo.ToAng (normal) - 90);
 
 		}
