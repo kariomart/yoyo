@@ -9,7 +9,9 @@ public class PlayerController : MonoBehaviour {
 
 	public DistanceJoint2D yoyoJoint1;
 	public Rigidbody2D yoyo1;
+	public NewYoyoController yoyoController1;
 	public DistanceJoint2D yoyoJoint2;
+	public NewYoyoController yoyoController2;
 	public Rigidbody2D yoyo2;
 
 	InputDevice dev;
@@ -18,6 +20,8 @@ public class PlayerController : MonoBehaviour {
 
 	public float throwSpd;
 	public float distanceIncrease;
+
+	public TextMesh text;
 
 	// Use this for initialization
 	void Start () {
@@ -37,12 +41,8 @@ public class PlayerController : MonoBehaviour {
 
 	void FixedUpdate() {
 
-		NormalizeYoyoDir();
-		Yoyo();
 
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			Application.LoadLevel (0);
-		}
+		Debug(yoyoController1, yoyoController2);
 		
 	}
 
@@ -55,6 +55,19 @@ public class PlayerController : MonoBehaviour {
 			yoyoJoint1.distance += distanceIncrease;
 		}
 		//yoyo2.MovePosition((Vector2)yoyo2.gameObject.transform.position + lStickDir * throwSpd);
+	}
+
+	void Debug(params object[] info) {
+		text.text = "";
+		string allInfo = "";
+		
+		foreach (object o in info) {
+			allInfo += o.ToString(); 
+			allInfo += "\n";
+		}
+
+		text.text = allInfo;
+
 	}
 
 	void NormalizeYoyoDir() {

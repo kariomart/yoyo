@@ -14,16 +14,20 @@ public class NewYoyoController : MonoBehaviour {
 	DistanceJoint2D joint;
 	Rigidbody2D rb;
 	LineRenderer yoyoString;
+	Vector2 v1;
+	Vector2 v2;
 	
 	public string stick;
 
 	public float throwSpd;
+	public float jumpSpd;
 	public float stringLength;
 	public Vector2 stickDir;
 	public Vector2 throwDir;
 	public float SLOP = 0.01f;
 
 	public YoyoState state = YoyoState.held;
+	public TextMesh text;
 
 	// Use this for initialization
 	void Start () {
@@ -73,6 +77,7 @@ public class NewYoyoController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+
 		switch (state) {
 			case YoyoState.held: 
 				rb.velocity = Vector2.zero;
@@ -81,26 +86,37 @@ public class NewYoyoController : MonoBehaviour {
 				if (stickDir.magnitude > .4f) {
 					joint.enabled = true;
 					throwDir = stickDir.normalized;
+					//float stickAngle = Geo.ToAng(stickDir);
+					//float roundedStick = Mathf.Round(stickAngle / 90f) * 90;
+					//throwDir = Geo.ToVect(roundedStick);
+					//Debug(stickDir, stickAngle, roundedStick, throwDir);
 					state = YoyoState.thrown; 
 					rb.velocity = throwDir;
 				}
 				return;
+
 			case YoyoState.thrown: 
+				v1 = rb.velocity;
 				joint.distance += throwSpd;
+				v2 = rb.velocity;
 				if (maxLength()) state = YoyoState.returning;
 				if (stickDir.magnitude > .4f) {
 					throwDir = stickDir.normalized;
-					state = YoyoState.thrown; 
 					rb.velocity = throwDir;
 				}
+				// if (touchedJoystick()) {
+				// 	rb.MovePosition(new Vector2(transform.position.x + stickDir.normalized.x, transform.position.y));
+				// }
 			break;
 
 			case YoyoState.returning: 
-				joint.distance -= throwSpd / 2.0f;
+				joint.distance -= throwSpd;
 				if (nearPlayer() ) {
-					state = abovePlayer() ? YoyoState.thrown : YoyoState.held;
+					//state = abovePlayer() ? YoyoState.thrown : YoyoState.held;
+					state = YoyoState.held;
 					SoundController.me.PlaySound(heldSound, 1f);
 				}
+
 			break;
 
 			case YoyoState.stopped:
@@ -114,6 +130,8 @@ public class NewYoyoController : MonoBehaviour {
 			}
 	}
 
+	
+
 	void DrawString() {
 
 			Vector2 p1 = joint.connectedBody.transform.position;
@@ -124,6 +142,14 @@ public class NewYoyoController : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll) {
+		Vector2 jumpDir;
+
+		if (coll.gameObject.tag == "Stage") {
+			jumpDir = (player.transform.position - this.transform.position).normalized;
+			jumpDir.x += joint.connectedBody.velocity.normalized.x;
+		    //joint.connectedBody.velocity = jumpDir * jumpSpd;
+			joint.connectedBody.AddForce(jumpDir * jumpSpd, ForceMode2D.Impulse);
+		}
 		// if player above yoyo, do nothing
 		if (player.position.y > transform.position.y) return;
 
@@ -136,5 +162,14 @@ public class NewYoyoController : MonoBehaviour {
 		// all else stop yoyo from moving
 		state = YoyoState.stopped;
 
+	}
+
+	public override string ToString() {
+		string info = "";
+
+		info += state + " ";
+		info += throwDir.ToString();
+
+		return info;
 	}
 }

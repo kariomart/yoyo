@@ -113,8 +113,8 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-//		DrawYoyoString ();
-//		CheckForYoyoReturn ();
+		DrawYoyoString ();
+		CheckForYoyoReturn ();
 //		Debug.Log (bonusFrames + " " + yoyoController.bonusCounter);
 
 		if (Input.GetKeyDown(KeyCode.R)) {
@@ -205,7 +205,7 @@ public class PlayerMovement : MonoBehaviour {
 	private void FixedUpdate() {
         SetGrounded();
         //updateTimer();
-		//CheckForGrapple ();
+		CheckForGrapple ();
 		float dis = Vector2.Distance (yoyo.transform.position, transform.position);
 
 		if (dir1 != Vector2.zero && freshYoyo) {
