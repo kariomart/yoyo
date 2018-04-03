@@ -33,9 +33,5 @@ public class CameraController : MonoBehaviour {
 		Vector3 smoothedPos = Vector2.Lerp (transform.position, desiredPos, smoothSpeed);
 		transform.position = new Vector3 (smoothedPos.x, smoothedPos.y, -10f);
 
-		if (playerController.vel.y > 0) {
-			//cam.orthographicSize = defSize + (playerController.vel.y * .5f);
-		}
-
 	}
 }

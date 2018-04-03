@@ -18,7 +18,7 @@ public class DeathNet : MonoBehaviour {
 
 		if (coll.gameObject.layer == LayerMask.NameToLayer("Player")) {
 
-			Master.me.playerController.GoToCheckPoint ();
+			Master.me.gameOver();
 
 
 		}

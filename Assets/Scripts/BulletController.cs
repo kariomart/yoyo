@@ -34,8 +34,7 @@ public class BulletController : MonoBehaviour {
 
 
 		if (coll.gameObject.tag == "Player") {
-			
-			Master.me.playerController.GoToCheckPoint ();
+			Master.me.gameOver();
 		}
 
 

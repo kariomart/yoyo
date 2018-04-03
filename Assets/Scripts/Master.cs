@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Master : MonoBehaviour {
 
+	public enum Sound {enemy1, enemy2, yoyoWhoosh};
 	public static Master me;
 	public GameObject player;
 	public GameObject yoyo;
@@ -15,6 +17,7 @@ public class Master : MonoBehaviour {
 
 	//public List<AudioClip> sounds = new List<AudioClip> ();
 	public AudioClip[] sounds;
+
 	public GameObject[] spawners;
 
 	public AudioClip enemy1;
@@ -31,6 +34,7 @@ public class Master : MonoBehaviour {
 	public AudioClip restart;
 	public AudioClip fireworks;
 
+
 	// Use this for initialization
 	void Awake () {
 
@@ -42,7 +46,6 @@ public class Master : MonoBehaviour {
 
 		//LoadAssets ();
 		GetEnemies();
-
 		
 	}
 	
@@ -53,27 +56,27 @@ public class Master : MonoBehaviour {
 
 	void LoadAssets() {
 
-//		Object[] boop = Resources.LoadAll("Audio", typeof(AudioClip));
-//		audio = new AudioClip [boop.Length];
-//
-//		//audio = Resources.LoadAll ("Audio", typeof(AudioClip));
-//		//audio = (AudioClip[])Resources.LoadAll("Audio", typeof(AudioClip));
-//
-//		for (int i = 0; i < audio.; i++) {
-//
-//			audio [i] = (AudioClip)boop [i];
-//
-//		}
-//
-//	}
+// //		Object[] boop = Resources.LoadAll("Audio", typeof(AudioClip));
+// //		audio = new AudioClip [boop.Length];
+// //
+// //		//audio = Resources.LoadAll ("Audio", typeof(AudioClip));
+// //		//audio = (AudioClip[])Resources.LoadAll("Audio", typeof(AudioClip));
+// //
+// //		for (int i = 0; i < audio.; i++) {
+// //
+// //			audio [i] = (AudioClip)boop [i];
+// //
+// //		}
+// //
+// //	}
 
-		Object[] boop = Resources.LoadAll ("Audio", typeof(AudioClip));
-		Debug.Log (boop.Length);
-		sounds = new AudioClip[boop.Length];
+// 		Object[] boop = Resources.LoadAll ("Audio", typeof(AudioClip));
+// 		Debug.Log (boop.Length);
+// 		sounds = new AudioClip[boop.Length];
 
-		for (int i = 0; i < boop.Length; i++) {
-			sounds [i] = (AudioClip)boop [i];
-		}
+// 		for (int i = 0; i < boop.Length; i++) {
+// 			sounds [i] = (AudioClip)boop [i];
+// 		}
 
 		//SoundController.me.PlaySound ("enemy 1", 1);
 
@@ -86,7 +89,17 @@ public class Master : MonoBehaviour {
 
 	}
 
-	public void RespawnEnemies() {
+	public void gameOver() {
+		SoundController.me.PlaySound (restart, 1f);
+		playerController.reset();
+		Master.me.respawnEnemies ();
+
+		Instantiate (yoyoController.deadYoyo, transform.position, Quaternion.identity);
+		yoyo.transform.position = player.transform.position;
+
+	}
+
+	public void respawnEnemies() {
 
 		foreach (GameObject spawner in spawners) {
 

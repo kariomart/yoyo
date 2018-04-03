@@ -20,10 +20,11 @@ public class AnimationController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		anim.SetFloat("Speed", Mathf.Abs(player.vel.x));
-		anim.SetBool("Grounded", player.grounded);
+		anim.SetFloat("Speed", Mathf.Abs(player.speedX()));
+		anim.SetBool("Grounded", player.grounded());
 
-		if (player.face == -1) {
+
+		if (player.facing() == Direction.left) {
 			spr.flipX = true;
 		} else {
 			spr.flipX = false;

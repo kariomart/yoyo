@@ -10,7 +10,7 @@ public class YoyoController : MonoBehaviour {
 	GameObject player;
 	public GameObject throwPt;
 	PlayerMovement playerController;
-	public static YoyoController me;
+	public LineRenderer yoyoString;   // TODO - move line renderer here
 
 	public string rightTrigger;
 
@@ -24,48 +24,44 @@ public class YoyoController : MonoBehaviour {
 	public Vector2 prevVel;
 	public float gravity;
 
-	public float jumpSpd;
 	public float jumpRange;
 	public float spd;
 	public float accel;
-	public float maxSpeed;
 	public float maxDistance;
 	public float defaultMaxDistance;
 	public float catchRange;
 	public float returnSpeed;
+	public float maxSpeed;
+	public float jumpSpeed;
 
 	public bool comingBack;
-	public bool beingHeld;
 	public bool chillin;
 	public bool grounded;
 	public bool sticking;
 
-	public GameObject grapplePoint;
-
+	public enum YoyoState {held, thrown, grappling};
+	public YoyoState state;
 
 	int counter = 0;
 	public int bonusCounter = 0;
 
-
 	// Use this for initialization
 	void Start () {
-
+		yoyoString = GetComponentInChildren<LineRenderer> ();
 		rb = GetComponent<Rigidbody2D> ();
 		spr = GetComponent<SpriteRenderer>();
 		player = GameObject.Find ("Player");
 		playerController = player.GetComponent<PlayerMovement> ();
-		beingHeld = true;
+		state = YoyoState.held;
 		defaultMaxDistance = maxDistance;
-
-
 	}
 
 	void FixedUpdate() {
 		
-		
+		checkForGrapple();
 		float dis = Vector2.Distance (player.transform.position, transform.position);
 
-		if (!beingHeld && !grounded){
+		if (state == YoyoState.thrown && !grounded){
 			vel.y -= (gravity * Time.fixedDeltaTime);
 		}
 
@@ -73,7 +69,7 @@ public class YoyoController : MonoBehaviour {
 			counter ++;
 
 			if (counter > 10) {
-				ReturnYoyo ();
+				returnYoyo ();
 				sticking = false;
 				counter = 0;
 			}
@@ -91,28 +87,26 @@ public class YoyoController : MonoBehaviour {
 		}
 
 		if (comingBack && dis > .2f) {
-			ReturnYoyo ();
+			returnYoyo ();
 
 		} 
         
-		if ((comingBack && dis < catchRange && vel != Vector2.zero && !beingHeld)) {
+		if ((comingBack && dis < catchRange && vel != Vector2.zero && state == YoyoState.thrown)) {
 //			Debug.Log ("recalled");
 			vel = Vector2.zero;
 			comingBack = false;
-			beingHeld = true;
+			state = YoyoState.held; 
 		}
 			
-		if (playerController.grappling) {
-
+		if (state == YoyoState.grappling) {
 			vel = Vector2.zero;
 			transform.position = transform.position;
-			
 		}
 
 		if (playerController.bonusFrames) {
 			if (bonusCounter < bonusFrames) {
 
-				vel += playerController.dir1.normalized;
+				vel += playerController.rightStickDir.normalized;
 				bonusCounter++;
 
 			} else {
@@ -120,14 +114,17 @@ public class YoyoController : MonoBehaviour {
 				bonusCounter = 0;
 			}
 
-
+		}
+		
+		if (state == YoyoState.grappling) {
+			playerController.swing();
 		}
 
 			
-		if (beingHeld) {
+		if (state == YoyoState.held) {
 //			Debug.Log("held");
             vel = Vector2.zero;
-			transform.position = playerController.desiredPos + (playerController.vel * Time.fixedDeltaTime);
+			transform.position = playerController.desiredPos + (playerController.velocity() * Time.fixedDeltaTime);
 			spr.enabled = false; //(Vector2)player.transform.position + playerController.desiredPos;
 
 		} 
@@ -138,68 +135,48 @@ public class YoyoController : MonoBehaviour {
 			prevVel = vel;
         }
 
-
-        //		Debug.Log (Input.GetAxis (rightTrigger));
-        //Debug.Log ("coming back " + comingBack);
-        //		if (!playerController.grappling) {
-        //
-        //			dis = Vector2.Distance (player.transform.position, transform.position);
-        //
-        //			/*if (dis > maxDistance && !comingBack) {
-        //				comingBack = true;
-        //			}*/
-        //
-        //			if (comingBack) {
-        ////				if (playerController.dir1 != Vector2.zero && dis > maxDistance - 1f) {
-        ////
-        ////					chillin = true;
-        ////					dir = Vector2.zero;
-        ////
-        ////				} else {
-        //					chillin = false;
-        //					dir = (player.transform.position - transform.position).normalized;
-        //				//}
-        //			}
-        //
-        //			if (playerController.yoyoing) {
-        //
-        //				dir.y -= gravity;
-        //
-        //			}
-        //			//Debug.Log (dis);
-        //
-        //			vel = new Vector2 (dir.x + accel, dir.y + accel);
-        //
-        //
-        //
-        //			vel = vel.normalized * Mathf.Min (vel.magnitude, maxSpeed);
-        //
-        //			if (!chillin) {
-        //				rb.MovePosition ((Vector2)transform.position + vel);
-        //			}
-        //
-        //
-        //
-        //			if (dis < 1 && comingBack) {
-        //
-        //				DeactivateYoyo ();
-        //
-        //			}
-        //		}
-        //			
-        //
-        //		if (playerController.grappling) {
-        //
-        //			//transform.position = grapplePoint.transform.position;
-        //
-        //		}
-        //
-
     }
 
-	void OnCollisionEnter2D(Collision2D coll) {
-		
+	public void holdYoyo() {
+		state = YoyoState.held;
+	}
 
+	public void drawYoyoString(Transform starting) {
+		if (enabled == true) {
+			Vector2 p1 = starting.position;    // TODO - CAST PROBLEM? 
+			Vector2 p2 = transform.position;
+			yoyoString.SetPosition (0, p1);
+			yoyoString.SetPosition (1, p2);
+
+			Debug.DrawLine (p1, p2, Color.black);
+			RaycastHit2D stringCast = Physics2D.Raycast (p1, (p2 - p1), Vector2.Distance (p1, p2), LayerMask.GetMask ("spike"));
+			if (stringCast.collider != null && state != YoyoState.held) {
+				Master.me.gameOver();
+			}
+		}
+	}
+
+	public void throwYoyo(Vector2 initialVelocity) {
+		state = YoyoState.thrown;
+		comingBack = false;
+		vel = initialVelocity;
+		this.gameObject.SetActive (true);
+	}
+
+	void checkForGrapple() {
+		float dis = Vector2.Distance (player.transform.position, transform.position);
+
+		if (dis >= (maxDistance - .01f) && grounded && transform.position.y > player.transform.position.y) {
+			state = YoyoState.grappling;
+		} else {
+			if (state == YoyoState.grappling) {
+				state = YoyoState.thrown;
+			}
+
+		}
+	}
+
+	void OnCollisionEnter2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Enemy") {
 			
 			if (playerController.takenObj == null && !coll.gameObject.GetComponent<EnemyController> ().dead) {
@@ -214,19 +191,12 @@ public class YoyoController : MonoBehaviour {
 		if (coll.gameObject.tag == "Stage") {
 			Instantiate (hitParticle, transform.position, Quaternion.identity);
 
-			if (!beingHeld && !playerController.grappling) {
+			if (state == YoyoState.thrown) {
 				SoundController.me.PlaySound (Master.me.yoyoHit2, 1f);
 			}
 
 			StageCollision ();
 			grounded = true;
-		}
-
-		if (coll.gameObject.tag == "grapple") {
-			playerController.grappling = true;
-			playerController.yoyoing = false;
-			grapplePoint = coll.gameObject;
-
 		}
 
 		if (coll.gameObject.tag == "Player" && comingBack) {
@@ -245,7 +215,7 @@ public class YoyoController : MonoBehaviour {
 
 	void OnCollisionStay2D(Collision2D coll) {
 
-		StopGoingThisWay (vel - (Vector2)transform.position);
+		stopGoingThisWay (vel - (Vector2)transform.position);
 
 		if (comingBack) {
 			//comingBack = false;
@@ -255,55 +225,35 @@ public class YoyoController : MonoBehaviour {
 
 
 	public void StageCollision() {
-		Vector2 jumpDir;
-        
-		if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y && !beingHeld) {
+    
+		if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y && state != YoyoState.held) {
 		  //if (!beingHeld && !playerController.grappling) {
-			jumpDir = (player.transform.position - this.transform.position).normalized;
-			//float jumpMag = (1 / (player.transform.position - transform.position).magnitude) * jumpDistanceScale;
-			jumpDir.x += playerController.vel.normalized.x;
-		    playerController.vel = jumpDir * jumpSpd;
-			//vel = playerController.vel;
-			//vel = jumpDir * (jumpSpd * 3f);
+			playerController.jump();
 			sticking = true;
-			//ReturnYoyo();
-			//beingHeld = true;
-		    }
+		}
 			
 			
 	}
 
-	public void ReturnYoyo() {
-
+	public void returnYoyo() {
 		Vector2 playerDir = (player.transform.position - this.transform.position).normalized;
 		vel = playerDir * returnSpeed;
 		comingBack = true;
-
 	}
 
-	public void DeactivateYoyo() {
+	public void deactivateYoyo() {
 		vel = Vector2.zero;
 		comingBack = false;
 		transform.position = player.transform.position;
 		gameObject.SetActive (false);
-		player.GetComponent<PlayerMovement> ().yoyoing = false;
+		state = YoyoState.held;
 	}
 
-	public void CutYoyo() {
-
-		Instantiate (deadYoyo, transform.position, Quaternion.identity);
-		beingHeld = true;
-		transform.position = player.transform.position;
-
-
-	}
-
-
-	public void SetVelo(Vector2 direction) {
-		vel = direction;
-	}
-
-	void StopGoingThisWay(Vector2 a) {
+	void stopGoingThisWay(Vector2 a) {
 		vel -= (a.normalized * Vector2.Dot(vel, a.normalized));
+	}
+
+	public bool isGrappling() {
+		return state == YoyoState.grappling;
 	}
 }

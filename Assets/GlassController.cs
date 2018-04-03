@@ -21,7 +21,7 @@ public class GlassController : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D coll) {
 
-		if (coll.gameObject.tag == "yoyo" && !Master.me.yoyoController.beingHeld) {
+		if (coll.gameObject.tag == "yoyo" ) { //&& !Master.me.yoyoController.state != YoyoState.held) {
 
 			SoundController.me.PlaySound (Master.me.glass, .25f);
 			fx.transform.parent = null;
