@@ -8,19 +8,6 @@ public class PlayerMovement : MonoBehaviour {
 
 	Rigidbody2D rb;
 
-	/*public string rightTrigger;
-	public string leftTrigger;
-	public string xButton;
-	public string yButton;
-	public string aButton;
-	//public string rightStick;
-	public string leftStickH;
-	public string leftStickV;
-	public string rightStickH;
-	public string rightStickV;
-
-	public string shootKey;*/
-
 	public float health;
 
 	public Vector2 vel;
@@ -160,6 +147,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (dir1.magnitude < .25f) {
 			dir1 = Vector2.zero;
+
 		} else if (prevRStick == Vector2.zero && yoyoController.beingHeld) {
             freshYoyo = true;
         }
@@ -217,7 +205,6 @@ public class PlayerMovement : MonoBehaviour {
 		}
 			
 
-
 			
 //
 //		if (grappling && dev.Action1.IsPressed) {
@@ -250,6 +237,7 @@ public class PlayerMovement : MonoBehaviour {
 		float mx = runMaxSpd;
 
 		if (!grounded || grappling) {
+			//Debug.Log("vel after gravity= " + vel);
 			vel.y -= gravity * Time.fixedDeltaTime;
 			accel = airAccel;
 			mx = airMaxSpd;
@@ -322,7 +310,13 @@ public class PlayerMovement : MonoBehaviour {
 		float aimAngle;
 
 
-		if (dir1 == Vector2.zero) {
+		if (!yoyoController.beingHeld) {
+			float dirAngle = Geo.ToAng(yoyo.transform.position - shootPt.transform.position);
+//			Debug.Log(dirAngle);
+			arm.transform.eulerAngles = new Vector3(0, 0, dirAngle + 90f);
+		}
+
+		else if (dir1 == Vector2.zero) {
 			aimAngle = 0;
 			arm.transform.eulerAngles = new Vector3(0, 0, 0);	
 		} else {
@@ -345,16 +339,11 @@ public class PlayerMovement : MonoBehaviour {
 		Vector3 pos = arm.transform.localPosition;
 
 		if (face == 1) {
-			arm.transform.localPosition = new Vector3(-0.168f, pos.y, pos.z);
+			arm.transform.localPosition = new Vector3(-0.131f, pos.y, pos.z);
 		}if (face == -1) {
 			arm.transform.localPosition = new Vector3(0.154f, pos.y, pos.z);
 		}
 
-		if (!yoyoController.beingHeld) {
-			float dirAngle = Geo.ToAng(yoyo.transform.position - shootPt.transform.position);
-//			Debug.Log(dirAngle);
-			arm.transform.eulerAngles = new Vector3(0, 0, dirAngle + 90f);
-		}
 
 	}
 		
@@ -368,7 +357,7 @@ public class PlayerMovement : MonoBehaviour {
 			//Vector2 perpVect = Geo.PerpVectL (yoyo.transform.position, transform.position);
 			StopGoingThisWay (transform.position - yoyo.transform.position);
 			grappling = true;
-			vel += (Vector2)((yoyo.transform.position + ((transform.position - yoyo.transform.position).normalized * yoyoController.maxDistance)) - transform.position) * swingSpeedScale;
+			//vel += (Vector2)((yoyo.transform.position + ((transform.position - yoyo.transform.position).normalized * yoyoController.maxDistance)) - transform.position) * swingSpeedScale;
 
 		} else {
 			grappling = false;
@@ -381,6 +370,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void CheckForYoyoReturn() {
+
 		if ((!yoyoController.comingBack || yoyoController.beingHeld) && yoyoController.enabled) {
 
 			if (timeSinceThrow < 5) {
@@ -438,7 +428,10 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
     private void OnCollisionStay2D(Collision2D coll) {
-        StopGoingThisWay(desiredPos - (Vector2)transform.position);
+
+		if (yoyoController.jumpFrames > 10 && !grounded) {
+        	StopGoingThisWay(desiredPos - (Vector2)transform.position);
+		}
 
 		if (yoyoController.beingHeld) {
 			yoyo.transform.position = transform.position;
@@ -450,6 +443,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     public void Yoyo() {
+		
 		if (yoyoController.beingHeld) {
 			bonusFrames = true;
 			SoundController.me.PlaySound (Master.me.yoyoWhoosh, .5f);
@@ -497,24 +491,11 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 
-	public void ShootBullet() {
-
-		GameObject tempBullet = Instantiate(bullet, new Vector3(shootPt.position.x + dir.x, shootPt.transform.position.y + dir.y), Quaternion.identity);
-		BulletController bulletController = tempBullet.GetComponent<BulletController> ();
-		if (dir == Vector2.zero) {
-
-			bulletController.vel = new Vector2 (1, 0);
-
-		} else {
-
-			bulletController.vel = dir;
-		}
-	}
-
 
     private void OnDrawGizmos() {
         if (Application.isPlaying) {
-			Gizmos.color = Color.black;
+			//Debug.Log("DRAWING GIZMOS");
+			Gizmos.color = Color.cyan;
             Gizmos.DrawCube(debugPts[0], Vector3.one * .01f);
             Gizmos.DrawCube(debugPts[1], Vector3.one * .01f);
         }
@@ -523,8 +504,8 @@ public class PlayerMovement : MonoBehaviour {
 
     void SetGrounded() {
 
-		Vector2 pt1 = (Vector2)transform.TransformPoint(box.offset + new Vector2((box.size.x / 2f), -box.size.y / 2f)) + new Vector2(-.01f, 0);//(box.size / 2));
-		Vector2 pt2 = (Vector2)transform.TransformPoint(box.offset - (box.size / 2f)) + new Vector2(.01f, 0);
+		Vector2 pt1 = (Vector2)transform.TransformPoint(box.offset + new Vector2((box.size.x / 2f), -box.size.y / 2f)) + new Vector2(-.05f, 0);//(box.size / 2));
+		Vector2 pt2 = (Vector2)transform.TransformPoint(box.offset - (box.size / 2f)) + new Vector2(.05f, 0);
 
 		debugPts[0] = pt1;
 		debugPts[1] = pt2;
@@ -540,6 +521,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
     void StopGoingThisWay(Vector2 a) {
+//		Debug.Log("stopped going this way");
         vel -= (a.normalized * Vector2.Dot(vel, a.normalized));
     }
 
