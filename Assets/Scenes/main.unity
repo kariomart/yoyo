@@ -4473,7 +4473,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &266538193
 Transform:
   m_ObjectHideFlags: 0
@@ -4493,7 +4493,7 @@ TilemapRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 266538192}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -23764,6 +23764,16 @@ Prefab:
       propertyPath: throwPt
       value: 
       objectReference: {fileID: 1350955274}
+    - target: {fileID: 114110097196165992, guid: ebe98d524864b4190b40d7b6e6132dd5,
+        type: 2}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1372528469}
+    - target: {fileID: 114110097196165992, guid: ebe98d524864b4190b40d7b6e6132dd5,
+        type: 2}
+      propertyPath: playerAnim
+      value: 
+      objectReference: {fileID: 1372528467}
     m_RemovedComponents:
     - {fileID: 61647331775384304, guid: ebe98d524864b4190b40d7b6e6132dd5, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: ebe98d524864b4190b40d7b6e6132dd5, type: 2}
@@ -24061,7 +24071,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: e43163788edca4219b53363ec64c3464, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

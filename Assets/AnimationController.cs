@@ -22,6 +22,7 @@ public class AnimationController : MonoBehaviour {
 
 		anim.SetFloat("Speed", Mathf.Abs(player.vel.x));
 		anim.SetBool("Grounded", player.grounded);
+		anim.SetBool("Grappling", player.grappling);
 
 		if (player.face == -1) {
 			spr.flipX = true;
@@ -30,4 +31,12 @@ public class AnimationController : MonoBehaviour {
 		}
 		
 	}
+
+	public void triggerJumpAnim() {
+
+		anim.SetTrigger("Jumped");
+
+	}
+
+
 }

@@ -437,6 +437,12 @@ public class PlayerMovement : MonoBehaviour {
 			yoyo.transform.position = transform.position;
 		}
 
+		if (!grounded) {
+
+			left = false;
+			right = false;
+		}
+
 //		if (vel.y != 0) {
 //			StopGoingThisWay (-coll.contacts [0].normal);
 //		}
@@ -446,7 +452,7 @@ public class PlayerMovement : MonoBehaviour {
 		
 		if (yoyoController.beingHeld) {
 			bonusFrames = true;
-			SoundController.me.PlaySound (Master.me.yoyoWhoosh, .5f);
+			SoundController.me.PlaySound (Master.me.yoyoWhoosh, .25f);
 			timeSinceThrow = 0;
 			yoyoController.beingHeld = false;
 			yoyoController.comingBack = false;

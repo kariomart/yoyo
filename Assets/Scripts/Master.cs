@@ -30,6 +30,7 @@ public class Master : MonoBehaviour {
 	public AudioClip checkpoint;
 	public AudioClip restart;
 	public AudioClip fireworks;
+	public AudioClip spinning;
 
 	// Use this for initialization
 	void Awake () {

@@ -8,9 +8,11 @@ public class YoyoController : MonoBehaviour {
 	Rigidbody2D rb;
 	SpriteRenderer spr;
 	GameObject player;
+	public AnimationController playerAnim;
 	public GameObject throwPt;
 	PlayerMovement playerController;
 	public static YoyoController me;
+	AudioSource spinningAudio;
 
 	public string rightTrigger;
 
@@ -54,6 +56,7 @@ public class YoyoController : MonoBehaviour {
 
 		rb = GetComponent<Rigidbody2D> ();
 		spr = GetComponent<SpriteRenderer>();
+		spinningAudio = GetComponentInChildren<AudioSource>();
 		player = GameObject.Find ("Player");
 		playerController = player.GetComponent<PlayerMovement> ();
 		beingHeld = true;
@@ -94,6 +97,10 @@ public class YoyoController : MonoBehaviour {
 			vel += (pos - (Vector2)transform.position) * 4f;
 		}
 
+		if (dis > maxDistance * 1.5f) {
+			beingHeld = true;
+		}
+
 		if (comingBack && dis > .2f) {
 			ReturnYoyo ();
 
@@ -104,6 +111,7 @@ public class YoyoController : MonoBehaviour {
 			vel = Vector2.zero;
 			comingBack = false;
 			beingHeld = true;
+
 		}
 			
 
@@ -134,6 +142,7 @@ public class YoyoController : MonoBehaviour {
 			transform.position = playerController.desiredPos + (playerController.vel * Time.fixedDeltaTime);
 			spr.enabled = false;
 			grounded = false;
+			spinningAudio.Stop();
 			 //(Vector2)player.transform.position + playerController.desiredPos;
 
 		} 
@@ -162,7 +171,7 @@ public class YoyoController : MonoBehaviour {
 			Instantiate (hitParticle, transform.position, Quaternion.identity);
 
 			if (!beingHeld && !playerController.grappling && vel.y != 0) {
-				SoundController.me.PlaySound (Master.me.yoyoHit2, 1f);
+				SoundController.me.PlaySound (Master.me.yoyoHit2, .25f);
 			}
 
 			StageCollision ();
@@ -210,7 +219,10 @@ public class YoyoController : MonoBehaviour {
 
 	public void StageCollision() {
 		Vector2 jumpDir;
-        
+        if (spinningAudio.volume > 0.001) {
+			spinningAudio.volume *= .5f;
+		}
+
 		if ((player.transform.position - transform.position).magnitude < jumpRange && transform.position.y < player.transform.position.y && !beingHeld) {
 			jumpFrames = 0;
 			//Debug.Log("jumped triggered, vel= " + playerController.vel);
@@ -220,6 +232,7 @@ public class YoyoController : MonoBehaviour {
 			jumpDir.x += playerController.vel.normalized.x;
 		    playerController.vel = jumpDir * jumpSpd;
 			playerController.grounded = false;
+			playerAnim.triggerJumpAnim();
 			//Debug.Log("jumpDir= " + jumpDir + "\nvel after= " + playerController.vel);
 			//vel = playerController.vel;
 			//vel = jumpDir * (jumpSpd * 3f);
@@ -260,6 +273,8 @@ public class YoyoController : MonoBehaviour {
 
 	public void SetVelo(Vector2 direction) {
 		vel = direction;
+		spinningAudio.Play();
+		spinningAudio.volume = 0.068f;
 	}
 
 	void StopGoingThisWay(Vector2 a) {
