@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: tilesetcaveground_14
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300028, guid: c2782c0edce9e48b1af722863ae2b493, type: 3}
+  m_Sprite: {fileID: 21300028, guid: 2a391fd0f33a24eb98aeb8b1546abd54, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

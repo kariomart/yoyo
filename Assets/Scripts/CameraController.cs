@@ -29,6 +29,9 @@ public class CameraController : MonoBehaviour {
 
 	void FixedUpdate() {
 
+		// if (playerController.grounded) {
+		// 	offset *= playerController.face; 
+		// }
 		Vector3 desiredPos = (Vector2)player.transform.position + offset;
 		Vector3 smoothedPos = Vector2.Lerp (transform.position, desiredPos, smoothSpeed);
 		transform.position = new Vector3 (smoothedPos.x, smoothedPos.y, -10f);

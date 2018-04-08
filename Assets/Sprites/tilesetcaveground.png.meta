@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: c2782c0edce9e48b1af722863ae2b493
-timeCreated: 1523134146
+guid: 2a391fd0f33a24eb98aeb8b1546abd54
+timeCreated: 1523136929
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -24,6 +24,20 @@ TextureImporter:
     21300034: tilesetcaveground_17
     21300036: tilesetcaveground_18
     21300038: tilesetcaveground_19
+    21300040: tilesetcaveground_20
+    21300042: tilesetcaveground_21
+    21300044: tilesetcaveground_22
+    21300046: tilesetcaveground_23
+    21300048: tilesetcaveground_24
+    21300050: tilesetcaveground_25
+    21300052: tilesetcaveground_26
+    21300054: tilesetcaveground_27
+    21300056: tilesetcaveground_28
+    21300058: tilesetcaveground_29
+    21300060: tilesetcaveground_30
+    21300062: tilesetcaveground_31
+    21300064: tilesetcaveground_32
+    21300066: tilesetcaveground_33
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -113,29 +127,52 @@ TextureImporter:
       name: tilesetcaveground_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 49
         y: 252
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -20}
+        - {x: -23, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -21, y: 24}
+        - {x: -24, y: 21}
+        - {x: -24, y: -14}
+        - {x: -16, y: -22}
+        - {x: -9, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
       name: tilesetcaveground_1
       rect:
         serializedVersion: 2
-        x: 48
+        x: 0
         y: 252
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 22, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -22}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
       name: tilesetcaveground_2
@@ -146,10 +183,19 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: 24, y: 24}
+        - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -20}
       tessellationDetail: 0
     - serializedVersion: 2
       name: tilesetcaveground_3
@@ -160,13 +206,81 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -22}
+        - {x: -21, y: -24}
+        - {x: 12, y: -24}
+        - {x: 24, y: -17}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -23.891663, y: -18.862457}
+        - {x: -20.374954, y: -22.1333}
+        - {x: -15.789444, y: -22.394714}
+        - {x: 8.631683, y: -21.394714}
+        - {x: 23.799332, y: -13.167664}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
       name: tilesetcaveground_4
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 252
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -23, y: 24}
+        - {x: -24, y: 23}
+        - {x: -24, y: -7}
+        - {x: -11, y: -12}
+        - {x: 12, y: -12}
+        - {x: 24, y: -7}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -17, y: -11}
+        - {x: 16, y: -11}
+        - {x: 24, y: -6}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_5
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 252
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -22, y: -11}
+        - {x: 15, y: -17}
+        - {x: 21, y: -17}
+        - {x: 24, y: -14}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -23, y: -11}
+        - {x: 12, y: -16}
+        - {x: 22, y: -16}
+        - {x: 24, y: -12}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_6
       rect:
         serializedVersion: 2
         x: 0
@@ -174,111 +288,280 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: tilesetcaveground_5
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 204
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: tilesetcaveground_6
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 204
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -20}
+        - {x: -23, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -21, y: 24}
+        - {x: -24, y: 21}
+        - {x: -24, y: -14}
+        - {x: -16, y: -22}
+        - {x: -9, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
       name: tilesetcaveground_7
       rect:
         serializedVersion: 2
         x: 48
-        y: 156
+        y: 204
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 22, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -22}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
       name: tilesetcaveground_8
       rect:
         serializedVersion: 2
         x: 96
-        y: 156
+        y: 204
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
       name: tilesetcaveground_9
       rect:
         serializedVersion: 2
-        x: 144
-        y: 156
+        x: 192
+        y: 204
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -23, y: 24}
+        - {x: -24, y: 23}
+        - {x: -24, y: -7}
+        - {x: -11, y: -12}
+        - {x: 12, y: -12}
+        - {x: 24, y: -7}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -17, y: -11}
+        - {x: 16, y: -11}
+        - {x: 24, y: -6}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
       name: tilesetcaveground_10
       rect:
         serializedVersion: 2
-        x: 0
-        y: 108
+        x: 240
+        y: 204
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -22, y: -11}
+        - {x: 15, y: -17}
+        - {x: 21, y: -17}
+        - {x: 24, y: -14}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -23, y: -11}
+        - {x: 12, y: -16}
+        - {x: 22, y: -16}
+        - {x: 24, y: -12}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
       name: tilesetcaveground_11
       rect:
         serializedVersion: 2
         x: 48
+        y: 156
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 22, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -22}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_12
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 156
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: 24, y: 24}
+        - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -20}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_13
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 156
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -22}
+        - {x: -21, y: -24}
+        - {x: 12, y: -24}
+        - {x: 24, y: -17}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -20}
+        - {x: -22, y: -23}
+        - {x: -19, y: -24}
+        - {x: -1, y: -23}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_14
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 156
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -22, y: -11}
+        - {x: 15, y: -17}
+        - {x: 21, y: -17}
+        - {x: 24, y: -14}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -23, y: -11}
+        - {x: 12, y: -16}
+        - {x: 22, y: -16}
+        - {x: 24, y: -12}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_15
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 108
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -20}
+        - {x: -23, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -21, y: 24}
+        - {x: -24, y: 21}
+        - {x: -24, y: -14}
+        - {x: -16, y: -22}
+        - {x: -9, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
-      name: tilesetcaveground_12
+      name: tilesetcaveground_16
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 108
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 22, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -22}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_17
       rect:
         serializedVersion: 2
         x: 96
@@ -286,13 +569,22 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: 24, y: 24}
+        - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -20}
       tessellationDetail: 0
     - serializedVersion: 2
-      name: tilesetcaveground_13
+      name: tilesetcaveground_18
       rect:
         serializedVersion: 2
         x: 144
@@ -300,13 +592,81 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -22}
+        - {x: -21, y: -24}
+        - {x: 12, y: -24}
+        - {x: 24, y: -17}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -20}
+        - {x: -18.899963, y: -21.79998}
+        - {x: -16.299973, y: -22.799988}
+        - {x: 8.803192, y: -22.889854}
+        - {x: 24, y: -14.078003}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
-      name: tilesetcaveground_14
+      name: tilesetcaveground_19
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 108
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -23, y: 24}
+        - {x: -24, y: 23}
+        - {x: -24, y: -7}
+        - {x: -11, y: -12}
+        - {x: 12, y: -12}
+        - {x: 24, y: -7}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -17, y: -11}
+        - {x: 16, y: -11}
+        - {x: 24, y: -6}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_20
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 108
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -22, y: -11}
+        - {x: 15, y: -17}
+        - {x: 21, y: -17}
+        - {x: 24, y: -14}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -23, y: -11}
+        - {x: 12, y: -16}
+        - {x: 22, y: -16}
+        - {x: 24, y: -12}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_21
       rect:
         serializedVersion: 2
         x: 0
@@ -314,13 +674,26 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -20}
+        - {x: -23, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -21, y: 24}
+        - {x: -24, y: 21}
+        - {x: -24, y: -14}
+        - {x: -16, y: -22}
+        - {x: -9, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
-      name: tilesetcaveground_15
+      name: tilesetcaveground_22
       rect:
         serializedVersion: 2
         x: 48
@@ -328,13 +701,23 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 22, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -22}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
-      name: tilesetcaveground_16
+      name: tilesetcaveground_23
       rect:
         serializedVersion: 2
         x: 96
@@ -342,13 +725,74 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: 24, y: 24}
+        - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -20}
       tessellationDetail: 0
     - serializedVersion: 2
-      name: tilesetcaveground_17
+      name: tilesetcaveground_24
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 60
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 22}
+        - {x: -24, y: -11}
+        - {x: -11, y: -16}
+        - {x: 15, y: -16}
+        - {x: 24, y: -13}
+        - {x: 24, y: 22}
+      physicsShape:
+      - - {x: -24, y: 22}
+        - {x: -24, y: -13}
+        - {x: -23, y: -15}
+        - {x: 24, y: -15}
+        - {x: 24, y: 22}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_25
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 60
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 22}
+        - {x: -24, y: -16}
+        - {x: -7, y: -21}
+        - {x: 24, y: -21}
+        - {x: 24, y: 22}
+      physicsShape:
+      - - {x: -24, y: 22}
+        - {x: -24, y: -10}
+        - {x: -21, y: -13}
+        - {x: -17, y: -13}
+        - {x: 16, y: -20}
+        - {x: 22, y: -20}
+        - {x: 24, y: -18}
+        - {x: 24, y: 22}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_26
       rect:
         serializedVersion: 2
         x: 48
@@ -356,13 +800,23 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 22, y: -24}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -22}
+        - {x: 24, y: 24}
       tessellationDetail: 0
     - serializedVersion: 2
-      name: tilesetcaveground_18
+      name: tilesetcaveground_27
       rect:
         serializedVersion: 2
         x: 96
@@ -370,13 +824,22 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 24, y: -24}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: 24, y: 24}
+        - {x: -24, y: 24}
+        - {x: -24, y: -24}
+        - {x: 20, y: -24}
+        - {x: 24, y: -20}
       tessellationDetail: 0
     - serializedVersion: 2
-      name: tilesetcaveground_19
+      name: tilesetcaveground_28
       rect:
         serializedVersion: 2
         x: 144
@@ -384,7 +847,104 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -22}
+        - {x: -21, y: -24}
+        - {x: 12, y: -24}
+        - {x: 24, y: -17}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -20}
+        - {x: -22, y: -23}
+        - {x: -19, y: -24}
+        - {x: -1, y: -23}
+        - {x: 24, y: -23}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_29
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 12
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -22, y: -11}
+        - {x: 15, y: -17}
+        - {x: 21, y: -17}
+        - {x: 24, y: -14}
+        - {x: 24, y: 24}
+      physicsShape:
+      - - {x: -24, y: 24}
+        - {x: -24, y: -8}
+        - {x: -23, y: -11}
+        - {x: 12, y: -16}
+        - {x: 22, y: -16}
+        - {x: 24, y: -12}
+        - {x: 24, y: 24}
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_30
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 12
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_31
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 252
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_32
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 156
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: tilesetcaveground_33
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 108
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
