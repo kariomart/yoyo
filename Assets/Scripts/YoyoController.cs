@@ -55,13 +55,12 @@ public class YoyoController : MonoBehaviour {
 	void Start () {
 
 		rb = GetComponent<Rigidbody2D> ();
-		spr = GetComponent<SpriteRenderer>();
+		spr = GetComponentInChildren<SpriteRenderer>();
 		spinningAudio = GetComponentInChildren<AudioSource>();
 		player = GameObject.Find ("Player");
 		playerController = player.GetComponent<PlayerMovement> ();
 		beingHeld = true;
 		defaultMaxDistance = maxDistance;
-
 
 	}
 
@@ -266,7 +265,6 @@ public class YoyoController : MonoBehaviour {
 		Instantiate (deadYoyo, transform.position, Quaternion.identity);
 		beingHeld = true;
 		transform.position = player.transform.position;
-
 
 	}
 

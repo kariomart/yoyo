@@ -22,12 +22,15 @@ public class YoyoTriggerController : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll) {
 
+		
+	if (coll.gameObject.layer == LayerMask.NameToLayer("Player")) {
 		fakeYoyo.SetActive (true);
 		Destroy (this.gameObject);
 		Destroy (hangingYoyo);
 		//yoyo.beingHeld = true;
 		//yoyo.gameObject.transform = 
 		//yoyo.enabled = true;
+	}
 
 	}
 }

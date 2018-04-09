@@ -121,7 +121,7 @@ public class PlayerMovement : MonoBehaviour {
 		right = dev.LeftStick.X > 0;
 		left = dev.LeftStick.X < 0;
 
-		if (dev.Action2.WasPressed) {
+		if (dev.Action2.WasPressed && yoyoController.enabled == true) {
 
 			GoToCheckPoint ();
 			yoyoController.CutYoyo ();
@@ -196,7 +196,9 @@ public class PlayerMovement : MonoBehaviour {
 	private void FixedUpdate() {
         SetGrounded();
         updateTimer();
-		rotateArm();
+		if (yoyoController.enabled) {
+			rotateArm();
+		}
 		CheckForGrapple ();
 		float dis = Vector2.Distance (yoyo.transform.position, transform.position);
 
@@ -447,6 +449,7 @@ public class PlayerMovement : MonoBehaviour {
 //			StopGoingThisWay (-coll.contacts [0].normal);
 //		}
     }
+
 
     public void Yoyo() {
 		

@@ -8,6 +8,12 @@ public class SoundController : MonoBehaviour {
 	public GameObject audSource;
 	public AudioSource[] audSources;
 	public GameObject audSourcesParent;
+	public AudioClip caveAudioTrack;
+	public AudioClip outsideAudioTrack;
+	public AudioSource soundtrack;
+	public Transform player;
+	public DoubleAudioSource soundtrackController;
+	public float soundtrackVolume;
 
 	void Update() {
 
@@ -32,6 +38,11 @@ public class SoundController : MonoBehaviour {
 
 		}
 
+		soundtrack = GetComponent<AudioSource>();
+		soundtrackController = GetComponent<DoubleAudioSource>();
+		player = Master.me.player.transform;
+		startSoundtrack();
+
 	}
 
 	public static SoundController Get() {
@@ -47,8 +58,6 @@ public class SoundController : MonoBehaviour {
 
 	{
 		//		Debug.Log (snd);
-	
-
 		int sNum = GetSourceNum ();
 		audSources [sNum].clip = snd;
 		audSources [sNum].volume = vol;
@@ -117,7 +126,44 @@ public class SoundController : MonoBehaviour {
 
 		}
 
+	}
 
+	public void startSoundtrack() {
+
+		soundtrack.volume = soundtrackVolume;
+
+		if (player.position.x > 40) {
+
+			soundtrack.clip = outsideAudioTrack;
+			soundtrack.Play();
+
+		} else {
+
+			soundtrack.clip = caveAudioTrack;
+			soundtrack.Play();
+
+		}
+	}
+
+	public AudioClip getSoundtrack() {
+
+		AudioSource[] sources;
+		AudioSource currentSource;
+		sources = GetComponents<AudioSource>();
+
+		if (sources[0].volume > 0) {
+			currentSource = sources[1];
+		} else {
+			currentSource = sources[0];
+		}
+
+//		Debug.Log("CURRENT CLIP = " + currentSource.clip);
+
+		if (currentSource.clip = caveAudioTrack) {
+			return outsideAudioTrack;
+		} else {
+			return caveAudioTrack;
+		}
 
 
 	}
