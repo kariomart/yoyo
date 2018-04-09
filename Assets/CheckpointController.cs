@@ -27,7 +27,7 @@ public class CheckpointController : MonoBehaviour {
 
 		if ((coll.gameObject.tag == "Player" || coll.gameObject.tag == "yoyo") && !checkpointed) {
 
-			sprite.color = Color.red;
+			//sprite.color = Color.red;
 			checkpoint.transform.position = this.transform.position;
 			Instantiate (fx, transform.position, Quaternion.identity);
 			SoundController.me.PlaySound (Master.me.checkpoint, 1f);

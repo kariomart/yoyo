@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StartMenu : MonoBehaviour {
 
+	public string firstLevel;
 	// Use this for initialization
 	void Start () {
 		
@@ -14,7 +15,7 @@ public class StartMenu : MonoBehaviour {
 
 		if (Input.anyKeyDown) {
 
-			UnityEngine.SceneManagement.SceneManager.LoadScene ("main");
+			UnityEngine.SceneManagement.SceneManager.LoadScene (firstLevel);
 
 		}
 

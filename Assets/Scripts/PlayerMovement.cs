@@ -169,11 +169,11 @@ public class PlayerMovement : MonoBehaviour {
 
 		}
 
-		if (dev.RightTrigger.WasPressed && !yoyoController.beingHeld) {
+		// if (dev.RightTrigger.WasPressed && !yoyoController.beingHeld) {
 
-			yoyoController.ReturnYoyo ();
+		// 	yoyoController.ReturnYoyo ();
 
-		}
+		// }
 
 
 		if (Input.GetButtonDown ("start")) {
